@@ -5,6 +5,9 @@
 #
 # https://help.github.com/articles/ignoring-files/#create-a-global-gitignore
 
+# I use this as my wish list
+LATER
+
 .deps
 *.lo
 *.la
@@ -33,10 +36,6 @@ Makefile.objects
 missing
 mkinstalldirs
 modules
+
 run-tests.php
-tests/*/*.diff
-tests/*/*.out
-tests/*/*.php
-tests/*/*.exp
-tests/*/*.log
-tests/*/*.sh
+php_test_results_*
