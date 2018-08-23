@@ -1,0 +1,38 @@
+[Beanspeak]
+-----------
+
+TODO
+
+[Installation Guide]
+--------------------
+
+This guide explains how to install Beanspeak using a Windows operating system.
+Some parts are optional, when you have a specific PHP version.
+Parts which are only necessary for a specific PHP version, are marked as such.
+
+[Software Requirements]
+-----------------------
+
+* Install Visual Studio 2012 Express: http://www.microsoft.com/en-US/download/details.aspx?id=34673
+  You should start it and activate it.
+
+[Software Requirements General]
+-------------------------------
+
+* Install PHP (NTS): http://windows.php.net/download/
+
+* Install PHP SDK 2.0 for PHP 7.0+: https://github.com/OSTC/php-sdk-binary-tools
+
+* Download PHP Developer Pack(NTS!): http://windows.php.net/downloads/releases/
+  (Or build it yourself with `--enable-debug --disable-zts` and `nmake build-devel`,
+  or just `nmake snap` by using the PHP-SDK)
+
+[Installation of Beanspeak]
+---------------------------
+
+TODO
+
+[Additional Links]
+------------------
+
+* Building PHP 7.2+ under Windows: https://wiki.php.net/internals/windows/stepbystepbuild_sdk_2
