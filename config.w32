@@ -1,7 +1,8 @@
 // vim:ft=javascript
 
-ARG_ENABLE("beanspeak", "Whether to enable beanspeak support", "no");
+ARG_ENABLE("beanspeak", "whether to enable beanspeak support", "no");
 
 if (PHP_BEANSPEAK != "no") {
+    AC_DEFINE('HAVE_ZEPHIR_BEANSPEAK', 1, 'Whether you have beanspeak');
 	EXTENSION("beanspeak", "beanspeak.c", PHP_EXTNAME_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1");
 }
