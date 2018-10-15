@@ -1,8 +1,8 @@
 # Beanspeak
 
-A PHP client library for the [beanstalkd](https://beanstalkd.github.io) queue server delivered.
+A PHP client library for the [beanstalkd](https://beanstalkd.github.io) queue server.
 
-Supported PHP versions: 7.0, 7.1, 7.2
+Supported PHP versions: 7.0, 7.1, 7.2, 7.2
 
 **Pre-Alpha version, currently not working.**
 

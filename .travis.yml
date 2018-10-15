@@ -32,7 +32,6 @@ cache:
 
 compiler:
     - gcc
-    - clang
 
 env:
   global:
