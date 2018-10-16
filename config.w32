@@ -4,5 +4,8 @@ ARG_ENABLE("beanspeak", "whether to enable beanspeak support", "no");
 
 if (PHP_BEANSPEAK != "no") {
     AC_DEFINE('HAVE_BEANSPEAK', 1, 'Whether you have beanspeak');
+
 	EXTENSION("beanspeak", "beanspeak.c", null, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1");
+
+	PHP_INSTALL_HEADERS("ext/beanspeak", "php_beanspeak.h beanspeak/core.h");
 }
