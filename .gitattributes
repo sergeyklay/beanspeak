@@ -1,3 +1,15 @@
-*.c   linguist-language=C
-*.h   linguist-language=C
-*.w32 linguist-language=JavaScript
+*.c         eol=lf linguist-language=C
+*.h         eol=lf linguist-language=C
+*.w32       linguist-language=JavaScript
+
+tests/*     linguist-vendored
+
+*.md        text eol=lf linguist-language=Markdown linguist-documentation
+
+CREDITS     text eol=lf linguist-documentation
+LICENSE     text eol=lf linguist-documentation
+TODO        text eol=lf linguist-documentation
+NO_WARRANTY text eol=lf linguist-documentation
+README      text eol=lf linguist-documentation
+README.*    text eol=lf linguist-documentation
+VERSION     text eol=lf linguist-documentation
