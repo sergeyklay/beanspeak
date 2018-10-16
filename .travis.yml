@@ -36,6 +36,7 @@ compiler:
 env:
   global:
     - CFLAGS="-ggdb -O0 -Wall -fvisibility=hidden"
+    - NO_INTERACTION=1
     - REPORT_EXIT_STATUS=1
     - ZEND_DONT_UNLOAD_MODULES=1
     - USE_ZEND_ALLOC=0
@@ -54,8 +55,7 @@ before_script:
   - ulimit -c unlimited -S
 
 script:
-  - php -d extension=$(pwd)/modules/beanspeak.so --ri beanspeak
-  - make test
+  - make test TESTS=-m
 
 after_failure:
   - $(phpenv which php) -v
