@@ -10,6 +10,10 @@
 #ifndef PHP_BEANSPEAK_H
 # define PHP_BEANSPEAK_H 1
 
+# include <Zend/zend_modules.h>
+
+# include "beanspeak/helpers.h"
+
 extern zend_module_entry beanspeak_module_entry;
 # define phpext_beanspeak_ptr &beanspeak_module_entry
 

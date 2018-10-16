@@ -8,8 +8,8 @@ if test "$PHP_BEANSPEAK" != "no"; then
 
   PHP_BEANSPEAK_CFLAGS="-I@ext_srcdir@/beanspeak"
 
-  EXT_BEANSPEAK_SOURCES="beanspeak.c"
-  EXT_BEANSPEAK_HEADERS="php_beanspeak.h beanspeak/core.h"
+  EXT_BEANSPEAK_SOURCES="beanspeak.c beanspeak/client.c"
+  EXT_BEANSPEAK_HEADERS="php_beanspeak.h beanspeak/class_entries.h beanspeak/client.h beanspeak/client.h"
 
   PHP_NEW_EXTENSION(beanspeak, $EXT_BEANSPEAK_SOURCES, $ext_shared,, $PHP_BEANSPEAK_CFLAGS)
   ifdef([PHP_INSTALL_HEADERS], [

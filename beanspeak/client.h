@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-#ifndef PHP_BEANSPEAK_CORE_H
-# define PHP_BEANSPEAK_CORE_H 1
+extern zend_class_entry *beanspeak_client_ce;
 
-#endif /* PHP_BEANSPEAK_H */
+BEANSPEAK_INIT_CLASS(Beanspeak_Client);

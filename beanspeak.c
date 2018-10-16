@@ -16,6 +16,9 @@
 #include <ext/standard/info.h>
 
 #include "php_beanspeak.h"
+#include "beanspeak/class_entries.h"
+
+zend_class_entry *beanspeak_client_ce;
 
 /* {{{ INI_ENTRIES
  */
@@ -41,6 +44,8 @@ PHP_RINIT_FUNCTION(beanspeak)
 static PHP_MINIT_FUNCTION(beanspeak)
 {
 	REGISTER_INI_ENTRIES();
+
+	BEANSPEAK_INIT(Beanspeak_Client);
 
 	return SUCCESS;
 }
