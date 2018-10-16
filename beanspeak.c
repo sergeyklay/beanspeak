@@ -12,9 +12,17 @@
 #endif
 
 #include <php.h>
+#include <php_ini.h>
 #include <ext/standard/info.h>
 
 #include "php_beanspeak.h"
+
+/* {{{ INI_ENTRIES
+ */
+PHP_INI_BEGIN()
+
+PHP_INI_END()
+/* }}} */
 
 /* {{{ PHP_RINIT_FUNCTION
  */
@@ -23,6 +31,26 @@ PHP_RINIT_FUNCTION(beanspeak)
 #if defined(ZTS) && defined(COMPILE_DL_BEANSPEAK)
 	ZEND_TSRMLS_CACHE_UPDATE()
 #endif
+
+	return SUCCESS;
+}
+/* }}} */
+
+/* {{{ PHP_MINIT_FUNCTION
+ */
+static PHP_MINIT_FUNCTION(beanspeak)
+{
+	REGISTER_INI_ENTRIES();
+
+	return SUCCESS;
+}
+/* }}} */
+
+/* {{{ PHP_MSHUTDOWN_FUNCTION
+ */
+static PHP_MSHUTDOWN_FUNCTION(beanspeak)
+{
+	UNREGISTER_INI_ENTRIES();
 
 	return SUCCESS;
 }
@@ -43,7 +71,7 @@ PHP_MINFO_FUNCTION(beanspeak)
 	php_info_print_table_row(2, "Build Date", __DATE__ " " __TIME__ );
 	php_info_print_table_end();
 
-	// DISPLAY_INI_ENTRIES();
+	DISPLAY_INI_ENTRIES();
 }
 /* }}} */
 
@@ -64,8 +92,8 @@ zend_module_entry beanspeak_module_entry = {
 	STANDARD_MODULE_HEADER,
 	PHP_BEANSPEAK_EXTNAME,			/* Extension name */
 	beanspeak_functions,			/* zend_function_entry */
-	NULL,							/* PHP_MINIT - Module initialization */
-	NULL,							/* PHP_MSHUTDOWN - Module shutdown */
+	PHP_MINIT(beanspeak) ,			/* PHP_MINIT - Module initialization */
+	PHP_MSHUTDOWN(beanspeak),		/* PHP_MSHUTDOWN - Module shutdown */
 	PHP_RINIT(beanspeak),			/* PHP_RINIT - Request initialization */
 	NULL,							/* PHP_RSHUTDOWN - Request shutdown */
 	PHP_MINFO(beanspeak),			/* PHP_MINFO - Module info */
