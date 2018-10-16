@@ -36,7 +36,6 @@ compiler:
 
 env:
   global:
-    - CFLAGS="-ggdb -O0 -Wall -fvisibility=hidden"
     - REPORT_COVERAGE=1
     - REPORT_EXIT_STATUS=1
     - NO_INTERACTION=1
@@ -52,6 +51,9 @@ before_install:
 
 install:
   - phpize
+  # However, the version of libtool that claims to no longer remove .gcno profiler information is libtool 2.2.6.
+  # The fix is probably in later libtool versions as well.
+  - aclocal && libtoolize --copy --force && autoreconf
   - ./configure --with-php-config=$(phpenv which php-config) --enable-beanspeak CFLAGS="--coverage -fprofile-arcs -ftest-coverage $CFLAGS" LDFLAGS="--coverage"
   - make -j"$(getconf _NPROCESSORS_ONLN)"
 
@@ -69,7 +71,6 @@ jobs:
       php: 7.2
       compiler: clang
       env:
-        - CFLAGS="-g -O0 -Wall -fvisibility=hidden"
         - CC=clang
       install:
         - phpize
