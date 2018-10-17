@@ -9,8 +9,6 @@
 
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 
-shopt -s nullglob
-
 PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
 PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
 
