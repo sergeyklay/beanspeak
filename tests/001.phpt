@@ -1,7 +1,7 @@
 --TEST--
 Check for beanspeak presence
 --SKIPIF--
-<?php if (!extension_loaded("beanspeak")) print "skip"; ?>
+<?php include('skipif.inc'); ?>
 --FILE--
 <?php
 echo "beanspeak extension is available";

@@ -18,7 +18,7 @@
 #include "php_beanspeak.h"
 #include "beanspeak/client.h"
 
-zend_class_entry *beanspeak_client_ce;
+zend_class_entry *beanspeak_client_ce_ptr;
 
 /* {{{ INI_ENTRIES
  */
@@ -70,7 +70,7 @@ PHP_MINFO_FUNCTION(beanspeak)
 	php_info_print_box_end();
 
 	php_info_print_table_start();
-	php_info_print_table_header(2, PHP_BEANSPEAK_EXTNAME, "enabled");
+	php_info_print_table_header(2, "beanspeak support", "enabled");
 	php_info_print_table_row(2, "Author", PHP_BEANSPEAK_AUTHOR);
 	php_info_print_table_row(2, "Version", PHP_BEANSPEAK_VERSION);
 	php_info_print_table_row(2, "Build Date", __DATE__ " " __TIME__ );
