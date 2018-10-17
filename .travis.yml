@@ -37,8 +37,6 @@ compiler:
 env:
   global:
     - REPORT_COVERAGE=1
-    - REPORT_EXIT_STATUS=1
-    - NO_INTERACTION=1
 
 before_install:
   - travis_retry gem install coveralls-lcov
@@ -69,13 +67,14 @@ jobs:
       compiler: clang
       env:
         - CC=clang
+        - REPORT_COVERAGE=0
       install:
         - phpize
         - ./configure --with-php-config=$(phpenv which php-config) --enable-beanspeak
         - make -j"$(getconf _NPROCESSORS_ONLN)"
       before_script:
       script:
-        - export REPORT_COVERAGE=0; .ci/run-tests.sh
+        - .ci/run-tests.sh
 
 after_success:
   - .ci/after-success.sh
