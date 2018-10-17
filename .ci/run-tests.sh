@@ -19,14 +19,7 @@ export USE_ZEND_ALLOC=0
 PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
 PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
 
-if [ ${PHP_MAJOR}.${PHP_MINOR} = "clang" ]; then
-	make -C "${PROJECT_ROOT}/tests" TESTS=-m test
-else
-	make -C "${PROJECT_ROOT}/tests" TESTS=-m test
-fi
-
 # PHP 7.3 - 7.4 sill have memory leaks
-[[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]] ||  [[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]] || make -C "${PROJECT_ROOT}/tests" TESTS=-m test && exit $?
-
+[[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]] ||  [[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]] || make -C "${PROJECT_ROOT}" TESTS=-m test && exit $?
 
 make -C "${PROJECT_ROOT}/tests" test
