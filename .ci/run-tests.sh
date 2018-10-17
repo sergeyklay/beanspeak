@@ -24,11 +24,10 @@ pushd "${PROJECT_ROOT}"
 
 	# PHP 7.3 - 7.4 sill have memory leaks
 	if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then
-		echo "NO_INTERACTION=${NO_INTERACTION}"
-		make test
+		$(phpenv which php) run-tests.php -d extension=beanspeak.so -d extension_dir=./modules -n ./tests/*.phpt
 	else
-		echo "NO_INTERACTION=${NO_INTERACTION}"
-		make TESTS=-m test
+		export TEST_PHP_ARGS=-m
+		$(phpenv which php) run-tests.php -d extension=beanspeak.so -d extension_dir=./modules -n ./tests/*.phpt
 	fi
 
 popd
