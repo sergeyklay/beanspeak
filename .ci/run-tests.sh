@@ -21,9 +21,7 @@ PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
 
 # PHP 7.3 - 7.4 sill have memory leaks
 if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then
-	make -C "${PROJECT_ROOT}" NO_INTERACTION=1 test
+	NO_INTERACTION=1 make -C "${PROJECT_ROOT}" test
 else
-	make -C "${PROJECT_ROOT}" TESTS=-m NO_INTERACTION=1 test
+	NO_INTERACTION=1 make -C "${PROJECT_ROOT}" TESTS=-m test
 fi
-
-exit $?
