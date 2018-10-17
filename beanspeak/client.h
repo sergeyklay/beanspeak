@@ -7,15 +7,16 @@
  * file that was distributed with this source code.
  */
 
-extern zend_class_entry *beanspeak_client_ce;
+extern zend_class_entry *beanspeak_client_ce_ptr;
+extern zend_object_handlers beanspeak_client_handlers;
 
 typedef struct {
-	zval		socket;
-	zval		options;
-	zval		usedTube;
-	zval		watchedTubes;
+	zval		socket;			/* current socket connection */
+	zval		options;		/* connection options */
+	zval		usedTube;		/* current used tube */
+	zval		watchedTubes;	/* current watched tubes */
 	zend_object	zo;
-} Beanspeak_Client_object;
+} beanspeak_client_object_t;
 
 BEANSPEAK_INIT_CLASS(Beanspeak_Client);
 

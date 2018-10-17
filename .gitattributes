@@ -6,6 +6,7 @@ tests/*     linguist-vendored
 
 *.md        text eol=lf linguist-language=Markdown linguist-documentation
 
+AUTHORS     text eol=lf linguist-documentation
 CREDITS     text eol=lf linguist-documentation
 LICENSE     text eol=lf linguist-documentation
 TODO        text eol=lf linguist-documentation
@@ -13,3 +14,4 @@ NO_WARRANTY text eol=lf linguist-documentation
 README      text eol=lf linguist-documentation
 README.*    text eol=lf linguist-documentation
 VERSION     text eol=lf linguist-documentation
+THANKS      text eol=lf linguist-documentation
