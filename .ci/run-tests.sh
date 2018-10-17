@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # This file is part of the beanspeak extension for PHP.
 #
