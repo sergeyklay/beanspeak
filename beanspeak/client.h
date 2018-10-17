@@ -10,3 +10,7 @@
 extern zend_class_entry *beanspeak_client_ce;
 
 BEANSPEAK_INIT_CLASS(Beanspeak_Client);
+
+BEANSPEAK_INIT_FUNCS(beanspeak_client_method_entry) {
+	PHP_FE_END
+};
