@@ -20,6 +20,10 @@ PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
 PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
 
 # PHP 7.3 - 7.4 sill have memory leaks
-[[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ]] ||  [[ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]] || make -C "${PROJECT_ROOT}" TESTS=-m test && exit $?
+if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then
+	make -C "${PROJECT_ROOT}" test
+else
+	make -C "${PROJECT_ROOT}" TESTS=-m test
+fi
 
-make -C "${PROJECT_ROOT}/tests" test
+exit $?
