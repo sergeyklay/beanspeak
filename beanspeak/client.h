@@ -20,6 +20,17 @@ typedef struct {
 
 BEANSPEAK_INIT_CLASS(Beanspeak_Client);
 
+PHP_METHOD(Beanspeak_Client, __construct);
+
+/* {{{ ARG_INFO */
+ZEND_BEGIN_ARG_INFO_EX(arginfo_beanspeak_client_construct_arginfo, 0, 0, 0)
+	ZEND_ARG_ARRAY_INFO(0, options, 1)
+ZEND_END_ARG_INFO()
+/* }}} */
+
+/* {{{ beanspeak_client_method_entry */
 BEANSPEAK_INIT_FUNCS(beanspeak_client_method_entry) {
+	PHP_ME(Beanspeak_Client, __construct, arginfo_beanspeak_client_construct_arginfo, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_FE_END
 };
+/* }}} */

@@ -56,8 +56,7 @@ static void beanspeak_client_object_free(zend_object *object)
 /* }}} */
 
 /* {{{ beanspeak_client_init_properties
- * Declare 'Beanspeak\Client' class properties.
- */
+ * Declare 'Beanspeak\Client' class properties. */
 static void beanspeak_client_init_properties(zend_class_entry *ce_ptr)
 {
 	zend_declare_property_null(ce_ptr, ZEND_STRL("socket"), ZEND_ACC_PROTECTED TSRMLS_CC);
@@ -67,7 +66,8 @@ static void beanspeak_client_init_properties(zend_class_entry *ce_ptr)
 }
 /* }}} */
 
-/* Create and register 'Beanspeak\Client' class. */
+/* {{{ beanspeak_Beanspeak_Client_init
+ * Create and register 'Beanspeak\Client' class. */
 BEANSPEAK_INIT_CLASS(Beanspeak_Client) {
 	BEANSPEAK_REGISTER_CLASS(Beanspeak, Client, beanspeak, client, beanspeak_client_method_entry, 0);
 
@@ -87,4 +87,26 @@ BEANSPEAK_INIT_CLASS(Beanspeak_Client) {
 
 	return SUCCESS;
 }
+/* }}} */
 
+/* {{{ beanspeak_client_instance */
+static void beanspeak_client_instance(zval *options)
+{
+	// TODO
+}
+/* }}} */
+
+/* {{{ proto public Beanspeak\Client::__construct([array $options = NULL])
+*/
+PHP_METHOD(Beanspeak_Client, __construct) {
+	zval *options = NULL;
+
+	BEANSPEAK_INIT_THIS();
+
+	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "|a", &options) == FAILURE) {
+		return;
+	}
+
+	beanspeak_client_instance(options);
+}
+/* }}} */
