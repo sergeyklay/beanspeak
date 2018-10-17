@@ -14,7 +14,7 @@
 #include <php.h>
 
 #include "../php_beanspeak.h"
-#include "class_entries.h"
+#include "client.h"
 
 static zend_object* create_object(zend_class_entry* ce)
 {

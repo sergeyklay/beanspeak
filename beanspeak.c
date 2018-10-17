@@ -16,7 +16,7 @@
 #include <ext/standard/info.h>
 
 #include "php_beanspeak.h"
-#include "beanspeak/class_entries.h"
+#include "beanspeak/client.h"
 
 zend_class_entry *beanspeak_client_ce;
 
