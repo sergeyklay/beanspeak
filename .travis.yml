@@ -44,8 +44,6 @@ before_install:
   - travis_retry gem install coveralls-lcov
   - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
   - echo -e 'opcache.enable=0\nopcache.enable_cli=0' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
-  - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
-  - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
   - ulimit -c unlimited -S
   - sudo chmod +s $(which gdb)
 
@@ -60,10 +58,9 @@ install:
 before_script:
   - lcov --directory $(pwd)/beanspeak --directory $(pwd) --zerocounters
   - lcov --directory $(pwd)/beanspeak --directory $(pwd) --capture --compat-libtool --initial --output-file coverage.info
-  - export TEST_PHP_EXECUTABLE=$(phpenv which php)
 
 script:
-  - $(phpenv which php) run-tests.php -d extension=beanspeak.so -d extension_dir=$(pwd)/modules -n $(pwd)/tests/*.phpt
+  - .ci/run-tests.sh
 
 jobs:
   include:
@@ -76,24 +73,15 @@ jobs:
         - phpize
         - ./configure --with-php-config=$(phpenv which php-config) --enable-beanspeak
         - make -j"$(getconf _NPROCESSORS_ONLN)"
+      before_script:
       script:
-        - export REPORT_COVERAGE=0
-        - $(phpenv which php) run-tests.php -d extension=beanspeak.so -d extension_dir=$(pwd)/modules -n $(pwd)/tests/*.phpt
+        - export REPORT_COVERAGE=0; .ci/run-tests.sh
 
 after_success:
-  - |
-      if [ "${REPORT_COVERAGE}" = "1" ]; then
-        lcov --no-checksum --directory $(pwd)/beanspeak --directory $(pwd) --capture --compat-libtool --output-file coverage.info
-        lcov --remove coverage.info "/usr*" --remove coverage.info "*/.phpenv/*" --remove coverage.info "/home/travis/build/include/*" --compat-libtool --output-file coverage.info
-        coveralls-lcov coverage.info
-      fi
+  - .ci/after-success.sh
 
 after_failure:
-  - $(phpenv which php) -v
-  - $(phpenv which php) -m
-  - for i in `find tests -name "*.out" 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
-  - for i in `find tests -name "*.mem" 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
-  - ./after_failure.sh
+  - .ci/after-failure.sh
 
 notifications:
   email: false
