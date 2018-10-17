@@ -42,4 +42,6 @@ modules
 run-tests.php
 php_test_results_*
 
+tmp-php.ini
+
 coverage.info

@@ -19,10 +19,10 @@
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
 		lower_ns## _ ##name## _ce = zend_register_internal_class(&ce); \
-		if (!UNEXPECTED(!lower_ns## _ ##name## _ce)) { \
+		if (UNEXPECTED(!lower_ns## _ ##name## _ce)) { \
 			char *_n = (#ns); \
 			char *_c = (#class_name); \
-			php_error_docref0(NULL, E_ERROR, "%s\%s: class registration has failed.", _n, _c); \
+			php_error_docref0(NULL, E_ERROR, "%s\\%s: class registration has failed.", _n, _c); \
 			return FAILURE; \
 		}\
 		lower_ns## _ ##name## _ce->ce_flags |= flags; \
