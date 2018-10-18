@@ -12,6 +12,7 @@
 #endif
 
 #include <php.h>
+#include <Zend/zend_operators.h>
 
 #include "../php_beanspeak.h"
 #include "client.h"
@@ -92,7 +93,25 @@ BEANSPEAK_INIT_CLASS(Beanspeak_Client) {
 /* {{{ beanspeak_client_instance */
 static void beanspeak_client_instance(zval *options)
 {
-	// TODO
+	zval defaults, merged;
+
+	ZVAL_NEW_ARR(&defaults);
+	ZVAL_NEW_ARR(&merged);
+
+	if (!options || Z_TYPE_P(options) != IS_ARRAY) {
+		array_init(options);
+	}
+
+	array_init_size(&defaults, 5);
+
+	add_assoc_stringl_ex(&defaults, ZEND_STRL("host"), ZEND_STRL("127.0.0.1"));
+	add_assoc_long_ex(&defaults, ZEND_STRL("host"), 11300);
+	add_assoc_bool_ex(&defaults, ZEND_STRL("persistent"), 1);
+	add_assoc_long_ex(&defaults, ZEND_STRL("timeout"), 60);
+	add_assoc_long_ex(&defaults, ZEND_STRL("wretries"), 8);
+
+	// 1: merge options + defaults
+	// 2: zend_update_property
 }
 /* }}} */
 

@@ -40,12 +40,12 @@
 
 #define BEANSPEAK_INIT_THIS() 					\
 	zval this_zv;								\
-    zval *this_ptr = getThis();					\
-    if (EXPECTED(this_ptr)) {					\
-        ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));	\
-        this_ptr = &this_zv;					\
-    } else {									\
-        this_ptr = NULL;						\
-    }
+	zval *this_ptr = getThis();					\
+	if (EXPECTED(this_ptr)) {					\
+		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));	\
+		this_ptr = &this_zv;					\
+	} else {									\
+		this_ptr = NULL;						\
+	}
 
 #endif /* PHP_BEANSPEAK_BEANSPEAK_HELPERS_H */
