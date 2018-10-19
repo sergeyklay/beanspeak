@@ -10,7 +10,15 @@
 PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 
 if [ "${REPORT_COVERAGE}" = "1" ]; then
-	lcov --no-checksum --directory ${PROJECT_ROOT}/beanspeak --directory ${PROJECT_ROOT} --capture --compat-libtool --output-file coverage.info
-	lcov --remove coverage.info "/usr*" --remove coverage.info "*/.phpenv/*" --remove coverage.info "/home/travis/build/include/*" --compat-libtool --output-file coverage.info
-	coveralls-lcov coverage.info
+	output=${PROJECT_ROOT}/coverage.info
+
+	lcov --no-checksum --directory ${PROJECT_ROOT}/beanspeak --directory ${PROJECT_ROOT} --capture --compat-libtool --output-file ${output}
+
+	lcov --remove ${output} "/usr*" \
+		--remove ${output} "*/.phpenv/*" \
+		--remove ${output} "/home/travis/build/include/*" \
+		--compat-libtool \
+		--output-file ${output}
+
+	coveralls-lcov ${output}
 fi

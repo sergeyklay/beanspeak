@@ -1,11 +1,10 @@
-dist: xenial
-sudo: required
+sudo: false
 
 language: php
 
 php:
   - 'master'
-  - '7.3.0RC1'
+  - '7.3'
   - '7.2'
   - '7.1'
   - '7.0'
@@ -43,7 +42,6 @@ before_install:
   - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
   - echo -e 'opcache.enable=0\nopcache.enable_cli=0' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
   - ulimit -c unlimited -S
-  - sudo chmod +s $(which gdb)
 
 install:
   - phpize
