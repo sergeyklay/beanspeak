@@ -16,19 +16,44 @@
 	int beanspeak_ ##name## _init(INIT_FUNC_ARGS)
 
 /* class/interface registering */
-#define BEANSPEAK_REGISTER_CLASS(ns, class_name, lower_ns, name, methods, flags)	\
+#define BEANSPEAK_REGISTER_CLASS(ns, cl, lns, n, m, f)					\
+	{																	\
+		zend_class_entry ce;											\
+		memset(&ce, 0, sizeof(zend_class_entry));						\
+		INIT_NS_CLASS_ENTRY(ce, #ns, #cl, m);							\
+		lns## _ ##n## _ce_ptr = zend_register_internal_class(&ce);		\
+		if (UNEXPECTED(!lns## _ ##n## _ce_ptr)) {						\
+			zend_error(E_ERROR, "Class '%s' registration was failed.",	\
+				ZEND_NS_NAME(#ns, #cl));								\
+			return FAILURE;												\
+		}																\
+		lns## _ ##n## _ce_ptr->ce_flags |= f;							\
+	}
+
+/* class/interface registering with parents */
+#define BEANSPEAK_REGISTER_CLASS_EX(ns, cl, lns, n, pce, m, f) 						\
 	{																				\
 		zend_class_entry ce;														\
-		memset(&ce, 0, sizeof(zend_class_entry));									\
-		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods);							\
-		lower_ns## _ ##name## _ce_ptr = zend_register_internal_class(&ce);			\
-		if (UNEXPECTED(!lower_ns## _ ##name## _ce_ptr)) {							\
-			const char *_n = (#ns);													\
-			const char *_c = (#class_name);											\
-			zend_error(E_ERROR, "%s\\%s: class registration has failed.", _n, _c);	\
+		if (!pce) {																	\
+			zend_error(E_ERROR, "Can't register class '%s' with null parent.",		\
+				ZEND_NS_NAME(#ns, #cl));											\
 			return FAILURE;															\
 		}																			\
-		lower_ns## _ ##name## _ce_ptr->ce_flags |= flags;							\
+		memset(&ce, 0, sizeof(zend_class_entry));									\
+		INIT_NS_CLASS_ENTRY(ce, #ns, #cl, m);										\
+		lns## _ ##n## _ce_ptr = zend_register_internal_class_ex(&ce, pce); 			\
+		if (UNEXPECTED(!lns## _ ##n## _ce_ptr)) {									\
+			zend_error(E_ERROR, "Class '%s' registration was failed.",				\
+				ZEND_NS_NAME(#ns, #cl));											\
+			return FAILURE;															\
+		}																			\
+		if (!lns## _ ##n## _ce_ptr) {												\
+			zend_error(E_ERROR,														\
+				"Class to extend '%s' was not found when registering class '%s'.",	\
+				(pce ? ZSTR_VAL(pce->name) : "(null)"), ZEND_NS_NAME(#ns, #cl));	\
+			return FAILURE;															\
+		}																			\
+		lns## _ ##n## _ce_ptr->ce_flags |= f;										\
 	}
 
 # define BEANSPEAK_INIT(name)												\
@@ -46,7 +71,8 @@
 		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));	\
 		this_ptr = &this_zv;					\
 	} else {									\
-		this_ptr = NULL;						\
+		ZVAL_NULL(&this_zv);					\
+		this_ptr = &this_zv;					\
 	}
 
 #endif /* PHP_BEANSPEAK_BEANSPEAK_HELPERS_H */

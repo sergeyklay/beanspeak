@@ -12,7 +12,10 @@ extern zend_object_handlers beanspeak_client_handlers;
 
 typedef struct {
 	zval		socket;			/* current socket connection */
-	zval		options;		/* connection options */
+	zval		host;			/* the beanstalk server hostname or IP address to connect to */
+	zval		port;			/* the port of the server to connect to */
+	zval		timeout;		/* timeout in seconds when establishing the connection */
+	zval		persistent;		/* whether to make the connection persistent or not */
 	zval		usedTube;		/* current used tube */
 	zval		watchedTubes;	/* current watched tubes */
 	zend_object	zo;
@@ -24,7 +27,7 @@ PHP_METHOD(Beanspeak_Client, __construct);
 
 /* {{{ ARG_INFO */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_beanspeak_client_construct_arginfo, 0, 0, 0)
-	ZEND_ARG_ARRAY_INFO(0, options, 1)
+	ZEND_ARG_TYPE_INFO(0, dsn, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 /* }}} */
 
