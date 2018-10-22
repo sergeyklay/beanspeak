@@ -128,16 +128,13 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 	}
 
 	/* Check protocol.
-	 *
 	 * Right now only 'tcp' is allowed:
-	 *
 	 *   tcp://10.0.0.8:11300
-	 *
 	 * todo: add support of unix sockets
 	 */
 	if (uri->scheme) {
 		if (strncasecmp("unix", ZSTR_VAL(uri->scheme), sizeof("unix")) == 0) {
-			php_error_docref(NULL, E_ERROR, "Protocol 'unix' currently disabled in Beanspeak Client");
+			php_error_docref(NULL, E_ERROR, "Protocol 'unix' currently disabled in Beanspeak Client.");
 			php_url_free(uri);
 			return FAILURE;
 		}
@@ -152,13 +149,13 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 		}
 	}
 
-	/* allow simple 'hostname' format, which php_url_parse_ex() treats as a path, not host */
-	if (EXPECTED(uri->host)) {
+	if (uri->host) {
 		ZVAL_STR(&host, uri->host);
 	} else if (uri->path && !uri->host) {
+		/* allow simple 'hostname' format, which php_url_parse_ex() treats as a path, not host */
 		ZVAL_STR(&host, uri->path);
 	} else {
-		php_error_docref(NULL, E_ERROR, "Invalid Client DSN scheme: missed host part");
+		php_error_docref(NULL, E_ERROR, "Invalid Client DSN scheme: missed host part.");
 		php_url_free(uri);
 		return FAILURE;
 	}
@@ -170,12 +167,12 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 
 	/* todo: get 'timeout' and 'persistent' from the uri->query as well */
 
-	if (EXPECTED(!ZVAL_IS_NULL(&host))) {
+	if (!ZVAL_IS_NULL(&host)) {
 		zend_update_property(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("host"), &host);
 		zval_ptr_dtor(&host);
 	}
 
-	if (EXPECTED(!ZVAL_IS_NULL(&port))) {
+	if (!ZVAL_IS_NULL(&port)) {
 		zend_update_property(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("port"), &port);
 		zval_ptr_dtor(&port);
 	}
@@ -186,8 +183,7 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 }
 /* }}} */
 
-/* {{{ proto public Beanspeak\Client::__construct([string $dsn = NULL])
-*/
+/* {{{ proto public Beanspeak\Client::__construct([string $dsn = NULL]) */
 PHP_METHOD(Beanspeak_Client, __construct) {
 	char *dsn_str = "";
 	size_t dsn_len = 0;

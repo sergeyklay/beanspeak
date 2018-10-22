@@ -12,7 +12,7 @@ extern zend_object_handlers beanspeak_client_handlers;
 
 typedef struct {
 	zval		socket;			/* current socket connection */
-	zval		host;			/* the beanstalk server hostname or IP address to connect to */
+	zval		host;			/* the beanstalkd server hostname or IP address to connect to */
 	zval		port;			/* the port of the server to connect to */
 	zval		timeout;		/* timeout in seconds when establishing the connection */
 	zval		persistent;		/* whether to make the connection persistent or not */
