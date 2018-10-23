@@ -46,6 +46,7 @@ static PHP_MINIT_FUNCTION(beanspeak)
 
 	BEANSPEAK_INIT(Beanspeak_Client);
 	BEANSPEAK_INIT(Beanspeak_ExceptionInterface);
+	BEANSPEAK_INIT(Beanspeak_InvalidArgumentException);
 
 	return SUCCESS;
 }
