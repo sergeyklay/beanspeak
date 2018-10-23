@@ -1,12 +1,23 @@
 --TEST--
-Should throw exception on invalid Beanspeak\Client constrictor params
+Should create a Beanspeak\Client instance with default params
 --SKIPIF--
 <?php include('skipif.inc'); ?>
 --FILE--
-<?php new Beanspeak\Client([]); ?>
---EXPECTF--
-Fatal error: Uncaught TypeError: Argument 1 passed to Beanspeak\Client::__construct() must be of the type string or null, array given in %s:%d
-Stack trace:
-#0 %s(%d): Beanspeak\Client->__construct(Array)
-#1 {main}
-  thrown in %s on line %d
+<?php
+$cl = new Beanspeak\Client();
+$reflect = new ReflectionObject($cl);
+foreach ($reflect->getProperties() as $prop) {
+    echo implode(' ', Reflection::getModifierNames($prop->getModifiers())) . " \${$prop->getName()} = ";
+    echo $prop->setAccessible(true);
+    echo $prop->getValue($cl) == null ? 'NULL' : $prop->getValue($cl);
+    echo ";\n";
+}
+?>
+--EXPECT--
+private $socket = NULL;
+private $host = 127.0.0.1;
+private $port = 11300;
+private $timeout = 60;
+private $persistent = 1;
+protected $usedTube = default;
+protected $watchedTubes = NULL;
