@@ -182,7 +182,7 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 
 	/* extract the port number as a long */
 	if (uri->port) {
-		zend_update_property_long(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("port"), (long)uri->port);
+		zend_update_property_long(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("port"), (uint16_t)uri->port);
 	}
 
 	/* todo: get 'timeout' and 'persistent' from the uri->query as well */
