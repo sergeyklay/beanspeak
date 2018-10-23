@@ -7,6 +7,6 @@ if (PHP_BEANSPEAK != "no") {
 
 	EXTENSION("beanspeak", "beanspeak.c", null, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1");
 
-	ADD_SOURCES(configure_module_dirname + "/beanspeak", "client.c", "beanspeak");
-	PHP_INSTALL_HEADERS("ext/beanspeak", "php_beanspeak.h beanspeak/client.h beanspeak/helpers.h");
+	ADD_SOURCES(configure_module_dirname + "/beanspeak", "client.c", "exception.c", "beanspeak");
+	PHP_INSTALL_HEADERS("ext/beanspeak", "php_beanspeak.h beanspeak/client.h beanspeak/exception.h beanspeak/helpers.h");
 }
