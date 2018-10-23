@@ -17,8 +17,10 @@
 
 #include "php_beanspeak.h"
 #include "beanspeak/client.h"
+#include "beanspeak/exception.h"
 
 zend_class_entry *beanspeak_client_ce_ptr;
+zend_class_entry *beanspeak_exceptioninterface_ce_ptr;
 
 /* {{{ INI_ENTRIES
  */
@@ -46,6 +48,7 @@ static PHP_MINIT_FUNCTION(beanspeak)
 	REGISTER_INI_ENTRIES();
 
 	BEANSPEAK_INIT(Beanspeak_Client);
+	BEANSPEAK_INIT(Beanspeak_ExceptionInterface);
 
 	return SUCCESS;
 }

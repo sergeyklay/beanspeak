@@ -10,7 +10,10 @@ foreach ($reflect->getProperties() as $prop) {
 }
 ?>
 --EXPECT--
-protected $socket;
-protected $options;
+private $socket;
+private $host;
+private $port;
+private $timeout;
+private $persistent;
 protected $usedTube;
 protected $watchedTubes;
