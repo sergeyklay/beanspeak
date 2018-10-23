@@ -4,7 +4,7 @@ Check for Beanspeak\ExceptionInterface parent interface
 <?php include('skipif.inc'); ?>
 --FILE--
 <?php
-use Beanspeak\ExceptionInterface;
+use Beanspeak\Exception\ExceptionInterface;
 class MyImpl extends \Exception implements ExceptionInterface {}
 $ex = new MyImpl();
 var_dump($ex instanceof \Throwable);

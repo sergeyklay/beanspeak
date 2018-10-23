@@ -49,9 +49,9 @@ throw_exception(beanspeak_exception_type_t type, const char *fmt, ...)
 }
 
 /* {{{ beanspeak_Beanspeak_ExceptionInterface_init
- * Create and register 'Beanspeak\ExceptionInterface' interface. */
+ * Create and register 'Beanspeak\Exception\ExceptionInterface' interface. */
 BEANSPEAK_INIT_CLASS(Beanspeak_ExceptionInterface) {
-	BEANSPEAK_REGISTER_CLASS(Beanspeak, ExceptionInterface, beanspeak,
+	BEANSPEAK_REGISTER_CLASS(Beanspeak\\Exception, ExceptionInterface, beanspeak,
 		exceptioninterface, beanspeak_exception_method_entry, ZEND_ACC_INTERFACE);
 
 	zend_class_implements(beanspeak_exceptioninterface_ce_ptr, 1, zend_ce_throwable);
@@ -61,9 +61,9 @@ BEANSPEAK_INIT_CLASS(Beanspeak_ExceptionInterface) {
 /* }}} */
 
 /* {{{ beanspeak_Beanspeak_InvalidArgumentException_init
- * Create and register 'Beanspeak\InvalidArgumentException' class. */
+ * Create and register 'Beanspeak\Exception\InvalidArgumentException' class. */
 BEANSPEAK_INIT_CLASS(Beanspeak_InvalidArgumentException) {
-	BEANSPEAK_REGISTER_CLASS_EX(Beanspeak, InvalidArgumentException, beanspeak, invalidargumentexception,
+	BEANSPEAK_REGISTER_CLASS_EX(Beanspeak\\Exception, InvalidArgumentException, beanspeak, invalidargumentexception,
 		spl_ce_InvalidArgumentException, beanspeak_exception_method_entry, 0);
 
 	zend_class_implements(beanspeak_invalidargumentexception_ce_ptr, 1, beanspeak_exceptioninterface_ce_ptr);

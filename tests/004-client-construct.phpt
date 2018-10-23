@@ -5,7 +5,7 @@ Should throw expected exception for disabled protocol
 --FILE--
 <?php new Beanspeak\Client('unix://var'); ?>
 --EXPECTF--
-Fatal error: Uncaught Beanspeak\InvalidArgumentException: Protocol 'unix' currently disabled in Beanspeak Client. in %s:%d
+Fatal error: Uncaught Beanspeak\Exception\InvalidArgumentException: Protocol 'unix' currently disabled in Beanspeak Client. in %s:%d
 Stack trace:
 #0 %s(%d): Beanspeak\Client->__construct('unix://var')
 #1 {main}
