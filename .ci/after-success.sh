@@ -22,3 +22,12 @@ if [ "${REPORT_COVERAGE}" = "1" ]; then
 
 	coveralls-lcov ${output}
 fi
+
+if [ ! -z "${CODECOV_TOKEN}" ]; then
+	curl -sSL https://codecov.io/bash -o ./codecov
+	chmod +x ./codecov
+
+	./codecov -s ${PROJECT_ROOT}
+else
+	echo "Skip uploading code coverage..."
+fi
