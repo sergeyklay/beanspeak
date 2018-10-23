@@ -10,6 +10,8 @@
 #ifndef PHP_BEANSPEAK_H
 # define PHP_BEANSPEAK_H 1
 
+# include <php.h>
+# include <Zend/zend.h>
 # include <Zend/zend_modules.h>
 
 # ifndef HAVE_STDINT_H
@@ -29,7 +31,63 @@ typedef unsigned __int64 uint64_t;
 typedef enum {false = 0, true = 1} bool;
 # endif
 
-# include "beanspeak/helpers.h"
+# define BEANSPEAK_INIT_CLASS(name) \
+	int beanspeak_ ##name## _init(INIT_FUNC_ARGS)
+
+/* class/interface registering */
+#define BEANSPEAK_REGISTER_CLASS(ns, cl, lns, n, m, f)					\
+	{																	\
+		zend_class_entry ce;											\
+		memset(&ce, 0, sizeof(zend_class_entry));						\
+		INIT_NS_CLASS_ENTRY(ce, #ns, #cl, m);							\
+		lns## _ ##n## _ce_ptr = zend_register_internal_class(&ce);		\
+		if (UNEXPECTED(!lns## _ ##n## _ce_ptr)) {						\
+			zend_error(E_ERROR, "Class '%s' registration has failed.",	\
+				ZEND_NS_NAME(#ns, #cl));								\
+			return FAILURE;												\
+		}																\
+		lns## _ ##n## _ce_ptr->ce_flags |= f;							\
+	}
+
+/* class/interface registering with parents */
+#define BEANSPEAK_REGISTER_CLASS_EX(ns, cl, lns, n, pce, m, f) 						\
+	{																				\
+		zend_class_entry ce;														\
+		if (!pce) {																	\
+			zend_error(E_ERROR, "Can't register class '%s' with null parent.",		\
+				ZEND_NS_NAME(#ns, #cl));											\
+			return FAILURE;															\
+		}																			\
+		memset(&ce, 0, sizeof(zend_class_entry));									\
+		INIT_NS_CLASS_ENTRY(ce, #ns, #cl, m);										\
+		lns## _ ##n## _ce_ptr = zend_register_internal_class_ex(&ce, pce); 			\
+		if (UNEXPECTED(!lns## _ ##n## _ce_ptr)) {									\
+			zend_error(E_ERROR,														\
+				"Class to extend '%s' was not found when registering class '%s'.",	\
+				(pce ? ZSTR_VAL(pce->name) : "NULL"), ZEND_NS_NAME(#ns, #cl));		\
+			return FAILURE;															\
+		}																			\
+		lns## _ ##n## _ce_ptr->ce_flags |= f;										\
+	}
+
+# define BEANSPEAK_INIT(name)												\
+	if (beanspeak_ ##name## _init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) {	\
+		return FAILURE;														\
+	}
+
+#define BEANSPEAK_INIT_FUNCS(class_functions) \
+	static const zend_function_entry class_functions[] =
+
+#define BEANSPEAK_INIT_THIS()					\
+	zval this_zv;								\
+	zval *this_ptr = getThis();					\
+	if (EXPECTED(this_ptr)) {					\
+		ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));	\
+		this_ptr = &this_zv;					\
+	} else {									\
+		ZVAL_NULL(&this_zv);					\
+		this_ptr = &this_zv;					\
+	}
 
 extern zend_module_entry beanspeak_module_entry;
 # define phpext_beanspeak_ptr &beanspeak_module_entry

@@ -7,6 +7,11 @@
  * file that was distributed with this source code.
  */
 
+#ifndef PHP_BEANSPEAK_CLIENT_H
+# define PHP_BEANSPEAK_CLIENT_H 1
+
+# include "../php_beanspeak.h"
+
 extern zend_class_entry *beanspeak_client_ce_ptr;
 extern zend_object_handlers beanspeak_client_handlers;
 
@@ -37,3 +42,5 @@ BEANSPEAK_INIT_FUNCS(beanspeak_client_method_entry) {
 	PHP_FE_END
 };
 /* }}} */
+
+#endif /* PHP_BEANSPEAK_CLIENT_H */
