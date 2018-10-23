@@ -17,7 +17,6 @@ addons:
     packages:
       - valgrind
       - gdb
-      - libzip4
       - lcov
 
 matrix:
