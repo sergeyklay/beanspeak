@@ -7,6 +7,11 @@
  * file that was distributed with this source code.
  */
 
+#ifndef PHP_BEANSPEAK_EXCEPTION_H
+# define PHP_BEANSPEAK_EXCEPTION_H 1
+
+# include "../php_beanspeak.h"
+
 typedef enum beanspeak_exception_type {
 	INVALID_ARGUMENT
 } beanspeak_exception_type_t;
@@ -25,3 +30,5 @@ BEANSPEAK_INIT_FUNCS(beanspeak_exception_method_entry) {
 	PHP_FE_END
 };
 /* }}} */
+
+#endif /* PHP_BEANSPEAK_EXCEPTION_H */
