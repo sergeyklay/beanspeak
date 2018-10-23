@@ -1,23 +1,26 @@
 --TEST--
-Should create a Beanspeak\Client instance with default params
+Should create a Beanspeak\Client instance with provided params
 --SKIPIF--
 <?php include('skipif.inc'); ?>
 --FILE--
 <?php
-$cl = new Beanspeak\Client();
-$reflect = new ReflectionObject($cl);
-foreach ($reflect->getProperties() as $prop) {
-    echo implode(' ', Reflection::getModifierNames($prop->getModifiers())) . " \${$prop->getName()} = ";
-    echo $prop->setAccessible(true);
-    echo $prop->getValue($cl) == null ? 'NULL' : $prop->getValue($cl);
-    echo ";\n";
-}
+$cl = new Beanspeak\Client('128.7.6.5');
+$reflect = new ReflectionClass(Beanspeak\Client::class);
+$prop = $reflect->getProperty('host');
+$prop->setAccessible(true);
+var_dump($prop->getValue($cl));
+
+$cl = new Beanspeak\Client('192.169.0.1:299');
+$reflect = new ReflectionClass(Beanspeak\Client::class);
+$host = $reflect->getProperty('host');
+$port = $reflect->getProperty('port');
+$host->setAccessible(true);
+$port->setAccessible(true);
+var_dump($host->getValue($cl));
+var_dump($port->getValue($cl));
+
 ?>
 --EXPECT--
-private $socket = NULL;
-private $host = 127.0.0.1;
-private $port = 11300;
-private $timeout = 60;
-private $persistent = 1;
-protected $usedTube = default;
-protected $watchedTubes = NULL;
+string(9) "128.7.6.5"
+string(11) "192.169.0.1"
+int(299)
