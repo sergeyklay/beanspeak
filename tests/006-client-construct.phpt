@@ -5,7 +5,7 @@ Should throw expected exception on host absence
 --FILE--
 <?php new Beanspeak\Client('?foo=bar'); ?>
 --EXPECTF--
-Fatal error: Uncaught Beanspeak\InvalidArgumentException: Invalid Client DSN scheme: missed host part. in %s:%d
+Fatal error: Uncaught Beanspeak\Exception\InvalidArgumentException: Invalid Client DSN scheme: missed host part. in %s:%d
 Stack trace:
 #0 %s(%d): Beanspeak\Client->__construct('?foo=bar')
 #1 {main}
