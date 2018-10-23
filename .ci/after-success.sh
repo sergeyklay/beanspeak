@@ -12,22 +12,20 @@ PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
 if [ "${REPORT_COVERAGE}" = "1" ]; then
 	output=${PROJECT_ROOT}/coverage.info
 
-	lcov --no-checksum --directory ${PROJECT_ROOT}/beanspeak --directory ${PROJECT_ROOT} --capture --compat-libtool --output-file ${output}
-
-	lcov --remove ${output} "/usr*" \
-		--remove ${output} "*/.phpenv/*" \
-		--remove ${output} "/home/travis/build/include/*" \
+	lcov --no-checksum \
+		--directory ${PROJECT_ROOT}/beanspeak \
+		--directory ${PROJECT_ROOT} \
+		--capture \
 		--compat-libtool \
 		--output-file ${output}
 
-	coveralls-lcov ${output}
-fi
+	lcov --remove ${output} "/usr*" \
+		--remove ${output} "*/.phpenv/*" \
+		--remove ${output} "${HOME}/build/include/*" \
+		--compat-libtool \
+		--output-file ${output}
 
-if [ ! -z "${CODECOV_TOKEN}" ]; then
-	curl -sSL https://codecov.io/bash -o ./codecov
-	chmod +x ./codecov
-
-	./codecov -s ${PROJECT_ROOT}
-else
-	echo "Skip uploading code coverage..."
+	if [ ! -z "${CODECOV_TOKEN}" ]; then
+		bash <(curl -s https://codecov.io/bash)
+	fi
 fi
