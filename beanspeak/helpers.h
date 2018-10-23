@@ -45,11 +45,6 @@
 		INIT_NS_CLASS_ENTRY(ce, #ns, #cl, m);										\
 		lns## _ ##n## _ce_ptr = zend_register_internal_class_ex(&ce, pce); 			\
 		if (UNEXPECTED(!lns## _ ##n## _ce_ptr)) {									\
-			zend_error(E_ERROR, "Class '%s' registration has failed.",				\
-				ZEND_NS_NAME(#ns, #cl));											\
-			return FAILURE;															\
-		}																			\
-		if (!lns## _ ##n## _ce_ptr) {												\
 			zend_error(E_ERROR,														\
 				"Class to extend '%s' was not found when registering class '%s'.",	\
 				(pce ? ZSTR_VAL(pce->name) : "NULL"), ZEND_NS_NAME(#ns, #cl));		\

@@ -12,6 +12,23 @@
 
 # include <Zend/zend_modules.h>
 
+# ifndef HAVE_STDINT_H
+typedef __int16 int16_t;
+typedef unsigned __int16 int16_t;
+typedef __int32 int32_t;
+typedef unsigned __int32 uint32_t;
+typedef __int64 int64_t;
+typedef unsigned __int64 uint64_t;
+# else
+#  include <stdint.h>
+# endif
+
+# ifdef HAVE_STDBOOL_H
+#  include <stdbool.h>
+# else
+typedef enum {false = 0, true = 1} bool;
+# endif
+
 # include "beanspeak/helpers.h"
 
 extern zend_module_entry beanspeak_module_entry;

@@ -19,8 +19,36 @@
 #include "exception.h"
 
 zend_class_entry *beanspeak_exceptioninterface_ce_ptr;
+zend_class_entry *beanspeak_invalidargumentexception_ce_ptr;
 
-/* {{{ beanspeak_Beanspeak_Exception_init
+zend_class_entry*
+exception_ce(beanspeak_exception_type_t type)
+{
+	switch (type) {
+		default:
+		case INVALID_ARGUMENT:
+			return beanspeak_invalidargumentexception_ce_ptr;
+	}
+}
+
+zend_object*
+throw_exception(beanspeak_exception_type_t type, const char *fmt, ...)
+{
+	char *msg;
+	zend_object *exception;
+	va_list argv;
+
+	va_start(argv, fmt);
+	vspprintf(&msg, 0, fmt, argv);
+	va_end(argv);
+
+	exception = zend_throw_exception(exception_ce(type), msg, type);
+	efree(msg);
+
+	return exception;
+}
+
+/* {{{ beanspeak_Beanspeak_ExceptionInterface_init
  * Create and register 'Beanspeak\ExceptionInterface' interface. */
 BEANSPEAK_INIT_CLASS(Beanspeak_ExceptionInterface) {
 	BEANSPEAK_REGISTER_CLASS(Beanspeak, ExceptionInterface, beanspeak,
@@ -32,4 +60,14 @@ BEANSPEAK_INIT_CLASS(Beanspeak_ExceptionInterface) {
 }
 /* }}} */
 
+/* {{{ beanspeak_Beanspeak_InvalidArgumentException_init
+ * Create and register 'Beanspeak\InvalidArgumentException' class. */
+BEANSPEAK_INIT_CLASS(Beanspeak_InvalidArgumentException) {
+	BEANSPEAK_REGISTER_CLASS_EX(Beanspeak, InvalidArgumentException, beanspeak, invalidargumentexception,
+		spl_ce_InvalidArgumentException, beanspeak_exception_method_entry, 0);
 
+	zend_class_implements(beanspeak_invalidargumentexception_ce_ptr, 1, beanspeak_exceptioninterface_ce_ptr);
+
+	return SUCCESS;
+}
+/* }}} */
