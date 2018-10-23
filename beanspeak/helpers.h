@@ -14,54 +14,6 @@
 # include <Zend/zend.h>
 # include <Zend/zend_extensions.h>
 
-# ifndef PHP_7_0_X_API_NO
-#  define PHP_7_0_X_API_NO	320151012
-# endif
-
-# ifndef PHP_7_1_X_API_NO
-#  define PHP_7_1_X_API_NO	320160303
-# endif
-
-# ifndef PHP_7_2_X_API_NO
-#  define PHP_7_2_X_API_NO	320160731
-# endif
-
-# ifndef PHP_7_3_X_API_NO
-#  define PHP_7_3_X_API_NO	320180731
-# endif
-
-# ifndef IS_PHP_73
-#  define IS_PHP_73          ZEND_EXTENSION_API_NO == PHP_7_3_X_API_NO
-# endif
-
-# ifndef IS_PHP_72
-#  define IS_PHP_72          ZEND_EXTENSION_API_NO == PHP_7_2_X_API_NO
-# endif
-
-# ifndef IS_PHP_70
-#  define IS_PHP_70          ZEND_EXTENSION_API_NO == PHP_7_0_X_API_NO
-# endif
-
-# ifndef IS_PHP_71
-#  define IS_PHP_71          ZEND_EXTENSION_API_NO == PHP_7_1_X_API_NO
-# endif
-
-# ifndef IS_AT_LEAST_PHP_73
-#  define IS_AT_LEAST_PHP_73 ZEND_EXTENSION_API_NO >= PHP_7_3_X_API_NO
-# endif
-
-# ifndef IS_AT_LEAST_PHP_72
-#  define IS_AT_LEAST_PHP_72 ZEND_EXTENSION_API_NO >= PHP_7_2_X_API_NO
-# endif
-
-# ifndef IS_AT_LEAST_PHP_71
-#  define IS_AT_LEAST_PHP_71 ZEND_EXTENSION_API_NO >= PHP_7_1_X_API_NO
-# endif
-
-# ifndef IS_AT_LEAST_PHP_70
-#  define IS_AT_LEAST_PHP_70 ZEND_EXTENSION_API_NO >= PHP_7_0_X_API_NO
-# endif
-
 # define BEANSPEAK_INIT_CLASS(name) \
 	int beanspeak_ ##name## _init(INIT_FUNC_ARGS)
 

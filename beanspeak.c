@@ -19,9 +19,6 @@
 #include "beanspeak/client.h"
 #include "beanspeak/exception.h"
 
-zend_class_entry *beanspeak_client_ce_ptr;
-zend_class_entry *beanspeak_exceptioninterface_ce_ptr;
-
 /* {{{ INI_ENTRIES
  */
 PHP_INI_BEGIN()

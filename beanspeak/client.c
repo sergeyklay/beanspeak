@@ -19,6 +19,7 @@
 #include "client.h"
 
 zend_object_handlers beanspeak_client_handlers;
+zend_class_entry *beanspeak_client_ce_ptr;
 
 /* {{{ beanspeak_client_create_object */
 static zend_always_inline beanspeak_client_object_t*
@@ -133,7 +134,7 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 	 * todo: add support of unix sockets
 	 */
 	if (uri->scheme) {
-#if IS_AT_LEAST_PHP_73
+#if PHP_VERSION_ID >= 70300
 		if (strncasecmp("unix", ZSTR_VAL(uri->scheme), sizeof("unix")) == 0) {
 #else
 		if (strncasecmp("unix", uri->scheme, sizeof("unix")) == 0) {
@@ -143,7 +144,7 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 			return FAILURE;
 		}
 
-#if IS_AT_LEAST_PHP_73
+#if PHP_VERSION_ID >= 70300
 		if (strncasecmp("tcp", ZSTR_VAL(uri->scheme), sizeof("tcp")) < 0) {
 			php_error_docref(NULL, E_ERROR,
 				"Invalid DSN scheme. Supported schemes are either 'tcp' or 'unix' (disabled), got '%s'.",
@@ -162,14 +163,14 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 	}
 
 	if (uri->host) {
-#if IS_AT_LEAST_PHP_73
+#if PHP_VERSION_ID >= 70300
 		ZVAL_STR(&host, uri->host);
 #else
 		ZVAL_STRING(&host, uri->host);
 #endif
 	} else if (uri->path && !uri->host) {
 		/* allow simple 'hostname' format, which php_url_parse_ex() treats as a path, not host */
-#if IS_AT_LEAST_PHP_73
+#if PHP_VERSION_ID >= 70300
 		ZVAL_STR(&host, uri->path);
 #else
 		ZVAL_STRING(&host, uri->path);
