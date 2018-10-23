@@ -133,27 +133,47 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 	 * todo: add support of unix sockets
 	 */
 	if (uri->scheme) {
+#if IS_AT_LEAST_PHP_73
 		if (strncasecmp("unix", ZSTR_VAL(uri->scheme), sizeof("unix")) == 0) {
+#else
+		if (strncasecmp("unix", uri->scheme, sizeof("unix")) == 0) {
+#endif
 			php_error_docref(NULL, E_ERROR, "Protocol 'unix' currently disabled in Beanspeak Client.");
 			php_url_free(uri);
 			return FAILURE;
 		}
 
+#if IS_AT_LEAST_PHP_73
 		if (strncasecmp("tcp", ZSTR_VAL(uri->scheme), sizeof("tcp")) < 0) {
 			php_error_docref(NULL, E_ERROR,
 				"Invalid DSN scheme. Supported schemes are either 'tcp' or 'unix' (disabled), got '%s'.",
 				ZSTR_VAL(uri->scheme)
 			);
+#else
+		if (strncasecmp("tcp", uri->scheme, sizeof("tcp")) < 0) {
+			php_error_docref(NULL, E_ERROR,
+				 "Invalid DSN scheme. Supported schemes are either 'tcp' or 'unix' (disabled), got '%s'.",
+				 uri->scheme
+			);
+#endif
 			php_url_free(uri);
 			return FAILURE;
 		}
 	}
 
 	if (uri->host) {
+#if IS_AT_LEAST_PHP_73
 		ZVAL_STR(&host, uri->host);
+#else
+		ZVAL_STRING(&host, uri->host);
+#endif
 	} else if (uri->path && !uri->host) {
 		/* allow simple 'hostname' format, which php_url_parse_ex() treats as a path, not host */
+#if IS_AT_LEAST_PHP_73
 		ZVAL_STR(&host, uri->path);
+#else
+		ZVAL_STRING(&host, uri->path);
+#endif
 	} else {
 		php_error_docref(NULL, E_ERROR, "Invalid Client DSN scheme: missed host part.");
 		php_url_free(uri);
