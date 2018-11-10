@@ -53,6 +53,7 @@ script:
 after_failure:
   - php -v
   - php -m
+  - make after-failure
 
 after_success:
   - make coverage-capture
