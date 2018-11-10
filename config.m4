@@ -31,6 +31,8 @@ if test "$PHP_BEANSPEAK" != "no"; then
   ifdef([PHP_INSTALL_HEADERS], [
   	PHP_INSTALL_HEADERS([ext/beanspeak], $EXT_BEANSPEAK_HEADERS)
   ])
+
+  PHP_ADD_MAKEFILE_FRAGMENT([beanspeak.mk])
 fi
 
 PHP_ARG_ENABLE(coverage, whether to include code coverage symbols,
