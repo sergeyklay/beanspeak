@@ -1,12 +1,24 @@
 // vim:ft=javascript
 
 ARG_ENABLE("beanspeak", "whether to enable beanspeak support", "no");
+ARG_ENABLE('beanspeak-debug', "Whether to enable debugging support in Beanspeak", "no");
 
 if (PHP_BEANSPEAK != "no") {
+    var beanspeak_sources = "beanspeak\\client.c beanspeak\\exception.c";
+    var beanspeak_headers = "php_beanspeak.h beanspeak\\client.h beanspeak\\exception.h";
+
+    var ext_flags = "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 " +
+                    "-I" + configure_module_dirname + " " +
+                    "-I" + configure_module_dirname + "\\beanspeak ";
+
+    if (PHP_BEANSPEAK_DEBUG != "no") {
+        AC_DEFINE('USE_BEANSPEAK_DEBUG', 1, "Include debugging support in Beanspeak");
+    }
+
+	EXTENSION("beanspeak", "beanspeak.c", null, ext_flags);
+
+	ADD_SOURCES(configure_module_dirname, beanspeak_sources, "beanspeak");
+	PHP_INSTALL_HEADERS("ext\\beanspeak", beanspeak_headers);
+
     AC_DEFINE('HAVE_BEANSPEAK', 1, 'Whether you have beanspeak');
-
-	EXTENSION("beanspeak", "beanspeak.c", null, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1");
-
-	ADD_SOURCES(configure_module_dirname + "/beanspeak", "client.c", "exception.c", "beanspeak");
-	PHP_INSTALL_HEADERS("ext/beanspeak", "php_beanspeak.h beanspeak/client.h beanspeak/exception.h");
 }

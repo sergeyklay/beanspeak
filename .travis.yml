@@ -29,55 +29,34 @@ cache:
   ccache: true
   timeout: 604800
 
-compiler:
-    - gcc
-
-env:
-  global:
-    - REPORT_COVERAGE=1
-
 before_install:
-  - travis_retry gem install coveralls-lcov
-  - echo -e 'variables_order=EGPCS\nenable_dl=true' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
-  - echo -e 'opcache.enable=0\nopcache.enable_cli=0' >> "$(phpenv root)/versions/$(phpenv version-name)/etc/php.ini"
+  - phpenv config-rm xdebug.ini || true
   - ulimit -c unlimited -S
 
 install:
   - phpize
-  # However, the version of libtool that claims to no longer remove .gcno profiler information is libtool 2.2.6.
-  # The fix is probably in later libtool versions as well.
   - aclocal && libtoolize --copy --force && autoreconf
-  - ./configure --with-php-config=$(phpenv which php-config) --enable-beanspeak CFLAGS="--coverage -fprofile-arcs -ftest-coverage $CFLAGS" LDFLAGS="--coverage"
+  - |
+      ./configure \
+      --with-php-config=$(phpenv which php-config) \
+      --enable-beanspeak \
+      --enable-beanspeak-debug \
+      --enable-coverage
   - make -j"$(getconf _NPROCESSORS_ONLN)"
 
 before_script:
-  - lcov --directory $(pwd)/beanspeak --directory $(pwd) --zerocounters
-  - lcov --directory $(pwd)/beanspeak --directory $(pwd) --capture --compat-libtool --initial --output-file coverage.info
+  - make coverage-initial
 
 script:
   - .ci/run-tests.sh
 
-jobs:
-  include:
-    - stage: Compillers testing
-      php: 7.2
-      compiler: clang
-      env:
-        - CC=clang
-        - REPORT_COVERAGE=0
-      install:
-        - phpize
-        - ./configure --with-php-config=$(phpenv which php-config) --enable-beanspeak
-        - make -j"$(getconf _NPROCESSORS_ONLN)"
-      before_script:
-      script:
-        - .ci/run-tests.sh
+after_failure:
+  - php -v
+  - php -m
 
 after_success:
-  - .ci/after-success.sh
-
-after_failure:
-  - .ci/after-failure.sh
+  - make coverage-capture
+  - if [ ! -z "${CODECOV_TOKEN}" ]; then bash <(curl -s https://codecov.io/bash); fi
 
 notifications:
   email: false
