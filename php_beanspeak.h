@@ -33,13 +33,13 @@ typedef enum {false = 0, true = 1} bool;
 #endif
 
 #ifdef PHP_WIN32
-#	define BEANSPEAK_API __declspec(dllimport)
+#	define PHP_BEANSPEAK_API __declspec(dllimport)
 #elif defined(__GNUC__) && __GNUC__ >= 4
-#	define BEANSPEAK_API __attribute__ ((visibility("default")))
+#	define PHP_BEANSPEAK_API __attribute__ ((visibility("default")))
 #elif defined(PHPAPI)
-#	define BEANSPEAK_API PHPAPI
+#	define PHP_BEANSPEAK_API PHPAPI
 #else
-#	define BEANSPEAK_API
+#	define PHP_BEANSPEAK_API
 #endif
 
 #include "beanspeak/common.h"
