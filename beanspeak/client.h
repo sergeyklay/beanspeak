@@ -12,7 +12,7 @@
 
 #include "../php_beanspeak.h"
 
-extern zend_class_entry *beanspeak_client_ce_ptr;
+BEANSPEAK_API extern zend_class_entry *beanspeak_client_ce_ptr;
 extern zend_object_handlers beanspeak_client_handlers;
 
 typedef struct {

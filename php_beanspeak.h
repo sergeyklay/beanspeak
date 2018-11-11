@@ -33,6 +33,16 @@ typedef unsigned __int64 uint64_t;
 typedef enum {false = 0, true = 1} bool;
 #endif
 
+#ifdef PHP_WIN32
+#define BEANSPEAK_API __declspec(dllimport)
+#elif defined(__GNUC__) && __GNUC__ >= 4
+#define BEANSPEAK_API __attribute__ ((visibility("default")))
+#elif defined(PHPAPI)
+#define BEANSPEAK_API PHPAPI
+#else
+#define BEANSPEAK_API
+#endif
+
 #define BEANSPEAK_INIT_CLASS(name) \
 	int beanspeak_ ##name## _init(INIT_FUNC_ARGS)
 
