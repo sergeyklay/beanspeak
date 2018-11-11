@@ -15,7 +15,7 @@ if (PHP_BEANSPEAK != "no") {
         AC_DEFINE('USE_BEANSPEAK_DEBUG', 1, "Include debugging support in Beanspeak");
     }
 
-	EXTENSION("beanspeak", "beanspeak.c", null, ext_flags);
+	EXTENSION("beanspeak", "php_beanspeak.c", null, ext_flags);
 
 	ADD_SOURCES(configure_module_dirname, beanspeak_sources, "beanspeak");
 	PHP_INSTALL_HEADERS("ext\\beanspeak", beanspeak_headers);

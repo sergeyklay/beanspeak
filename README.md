@@ -6,7 +6,7 @@
 
 A PHP client library for the [beanstalkd][:beanstalkd:] queue server.
 
-Supported PHP versions: 7.0, 7.1, 7.2, 7.2, 7.3
+Supported PHP versions: 7.0, 7.1, 7.2, 7.2, 7.3 and 7.4 (nightly) 
 
 **Pre-Alpha version, currently not working.**
 
