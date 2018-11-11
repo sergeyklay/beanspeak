@@ -25,7 +25,7 @@ if test "$PHP_BEANSPEAK" != "no"; then
   PHP_BEANSPEAK_CFLAGS="-I@ext_srcdir@/beanspeak"
 
   EXT_BEANSPEAK_SOURCES="php_beanspeak.c beanspeak/client.c beanspeak/exception.c"
-  EXT_BEANSPEAK_HEADERS="php_beanspeak.h beanspeak/client.h beanspeak/exception.h"
+  EXT_BEANSPEAK_HEADERS="php_beanspeak.h beanspeak/common.h beanspeak/client.h beanspeak/exception.h"
 
   PHP_NEW_EXTENSION(beanspeak, $EXT_BEANSPEAK_SOURCES, $ext_shared,, \\$(PHP_BEANSPEAK_CFLAGS))
   ifdef([PHP_INSTALL_HEADERS], [
