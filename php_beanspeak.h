@@ -8,36 +8,36 @@
  */
 
 #ifndef PHP_BEANSPEAK_H
-# define PHP_BEANSPEAK_H 1
+#define PHP_BEANSPEAK_H 1
 
-# include <php.h>
-# include <Zend/zend.h>
-# include <Zend/zend_types.h>
-# include <Zend/zend_modules.h>
-# include <Zend/zend_operators.h>
+#include <php.h>
+#include <Zend/zend.h>
+#include <Zend/zend_types.h>
+#include <Zend/zend_modules.h>
+#include <Zend/zend_operators.h>
 
-# ifdef HAVE_STDINT_H
-#  include <stdint.h>
-# else
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#else
 typedef __int16 int16_t;
 typedef unsigned __int16 int16_t;
 typedef __int32 int32_t;
 typedef unsigned __int32 uint32_t;
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
-# endif
+#endif
 
-# ifdef HAVE_STDBOOL_H
-#  include <stdbool.h>
-# else
+#ifdef HAVE_STDBOOL_H
+#include <stdbool.h>
+#else
 typedef enum {false = 0, true = 1} bool;
-# endif
+#endif
 
-# define BEANSPEAK_INIT_CLASS(name) \
+#define BEANSPEAK_INIT_CLASS(name) \
 	int beanspeak_ ##name## _init(INIT_FUNC_ARGS)
 
 /* class/interface registering */
-# define BEANSPEAK_REGISTER_CLASS(ns, cl, lns, n, m, f)					\
+#define BEANSPEAK_REGISTER_CLASS(ns, cl, lns, n, m, f)					\
 	{																	\
 		zend_class_entry ce;											\
 		memset(&ce, 0, sizeof(zend_class_entry));						\
@@ -52,7 +52,7 @@ typedef enum {false = 0, true = 1} bool;
 	}
 
 /* class/interface registering with parents */
-# define BEANSPEAK_REGISTER_CLASS_EX(ns, cl, lns, n, pce, m, f)						\
+#define BEANSPEAK_REGISTER_CLASS_EX(ns, cl, lns, n, pce, m, f)						\
 	{																				\
 		zend_class_entry ce;														\
 		if (!pce) {																	\
@@ -72,15 +72,15 @@ typedef enum {false = 0, true = 1} bool;
 		lns## _ ##n## _ce_ptr->ce_flags |= f;										\
 	}
 
-# define BEANSPEAK_INIT(name)												\
+#define BEANSPEAK_INIT(name)												\
 	if (beanspeak_ ##name## _init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) {	\
 		return FAILURE;														\
 	}
 
-# define BEANSPEAK_INIT_FUNCS(class_functions)	\
+#define BEANSPEAK_INIT_FUNCS(class_functions)	\
 	static const zend_function_entry class_functions[] =
 
-# define BEANSPEAK_INIT_THIS()					\
+#define BEANSPEAK_INIT_THIS()					\
 	zval this_zv;								\
 	zval *this_ptr = getThis();					\
 	if (EXPECTED(this_ptr)) {					\
@@ -91,7 +91,7 @@ typedef enum {false = 0, true = 1} bool;
 		this_ptr = &this_zv;					\
 	}
 
-# define BEANSPEAK_PROPERTY_HANDLER_PROLOG						\
+#define BEANSPEAK_PROPERTY_HANDLER_PROLOG						\
 	zval tmp_member;											\
 	if (Z_TYPE_P(member) != IS_STRING) {						\
 		ZVAL_STR(&tmp_member, zval_get_string_func(member));	\
@@ -99,21 +99,21 @@ typedef enum {false = 0, true = 1} bool;
 		cache_slot = NULL;										\
 	}
 
-# define BEANSPEAK_PROPERTY_HANDLER_EPILOG	\
+#define BEANSPEAK_PROPERTY_HANDLER_EPILOG	\
 	if (member == &tmp_member) {			\
 		zval_ptr_dtor_str(&tmp_member);		\
 	}
 
 extern zend_module_entry beanspeak_module_entry;
-# define phpext_beanspeak_ptr &beanspeak_module_entry
+#define phpext_beanspeak_ptr &beanspeak_module_entry
 
-# define PHP_BEANSPEAK_VERSION		"1.0.0"
-# define PHP_BEANSPEAK_EXTNAME		"beanspeak"
-# define PHP_BEANSPEAK_AUTHOR		"Serghei Iakovlev"
-# define PHP_BEANSPEAK_DESCRIPTION	"A PHP client library for the beanstalkd queue server."
+#define PHP_BEANSPEAK_VERSION		"1.0.0"
+#define PHP_BEANSPEAK_EXTNAME		"beanspeak"
+#define PHP_BEANSPEAK_AUTHOR		"Serghei Iakovlev"
+#define PHP_BEANSPEAK_DESCRIPTION	"A PHP client library for the beanstalkd queue server."
 
-# if defined(ZTS) && defined(COMPILE_DL_BEANSPEAK)
+#if defined(ZTS) && defined(COMPILE_DL_BEANSPEAK)
 ZEND_TSRMLS_CACHE_EXTERN()
-# endif
+#endif
 
 #endif /* PHP_BEANSPEAK_H */

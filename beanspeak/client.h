@@ -8,9 +8,9 @@
  */
 
 #ifndef PHP_BEANSPEAK_CLIENT_H
-# define PHP_BEANSPEAK_CLIENT_H 1
+#define PHP_BEANSPEAK_CLIENT_H 1
 
-# include "../php_beanspeak.h"
+#include "../php_beanspeak.h"
 
 extern zend_class_entry *beanspeak_client_ce_ptr;
 extern zend_object_handlers beanspeak_client_handlers;
@@ -31,14 +31,14 @@ BEANSPEAK_INIT_CLASS(Beanspeak_Client);
 PHP_METHOD(Beanspeak_Client, __construct);
 
 /* {{{ ARG_INFO */
-ZEND_BEGIN_ARG_INFO_EX(arginfo_beanspeak_client_construct_arginfo, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_beanspeak_client_construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO(0, dsn, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 /* }}} */
 
 /* {{{ beanspeak_client_method_entry */
 BEANSPEAK_INIT_FUNCS(beanspeak_client_method_entry) {
-	PHP_ME(Beanspeak_Client, __construct, arginfo_beanspeak_client_construct_arginfo, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME(Beanspeak_Client, __construct, arginfo_beanspeak_client_construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_FE_END
 };
 /* }}} */
