@@ -4,16 +4,15 @@
 #include <Zend/zend_types.h>
 
 typedef struct _beanspeak_object {
-	void *ptr;
 	HashTable *prop_handler;
 	zend_object zo;
-} beanspeak_object;
+} beanspeak_object_t;
 
 /* {{{ beanspeak_obj_from_zo */
-static inline beanspeak_object*
+static inline beanspeak_object_t*
 beanspeak_obj_from_zo(zend_object *obj)
 {
-	return (beanspeak_object*)((char*)(obj) - XtOffsetOf(beanspeak_object, zo));
+	return (beanspeak_object_t*)((char*)(obj) - XtOffsetOf(beanspeak_object_t, zo));
 }
 /* }}} */
 
