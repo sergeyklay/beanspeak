@@ -43,6 +43,7 @@ typedef enum {false = 0, true = 1} bool;
 #endif
 
 #include "beanspeak/common.h"
+#include "beanspeak/methods.h"
 
 zend_object* beanspeak_create_object(zend_class_entry* ce_ptr);
 

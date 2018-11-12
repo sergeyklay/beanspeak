@@ -14,12 +14,13 @@
 #include <php.h>
 #include <php_ini.h>
 #include <Zend/zend_hash.h>
+#include <Zend/zend_types.h>
 #include <Zend/zend_object_handlers.h>
 #include <Zend/zend_operators.h>
+#include <Zend/zend_portability.h>
 #include <ext/standard/info.h>
 
 #include "php_beanspeak.h"
-#include "beanspeak/client.h"
 // TODO:
 // #include "beanspeak/exception.h"
 
@@ -42,6 +43,7 @@ typedef int (*beanspeak_write_t)(beanspeak_object_t *obj, zval *newval);
 typedef struct _beanspeak_prop_handler {
 	beanspeak_read_t read_func;
 	beanspeak_write_t write_func;
+	int type;
 } beanspeak_prop_handler;
 
 /* {{{ beanspeak_dtor_prop_handler */
@@ -52,76 +54,30 @@ beanspeak_dtor_prop_handler(zval *zv)
 }
 /* }}} */
 
-/* {{{ beanspeak_read_prop_error */
-static int
-beanspeak_read_prop_error(beanspeak_object_t *obj, zval *retval)
-{
-	zend_throw_error(NULL, "Cannot read property");
-	return FAILURE;
-}
-/* }}} */
-
-/* {{{ beanspeak_write_prop_error */
-static int
-beanspeak_write_prop_error(beanspeak_object_t *obj, zval *newval)
-{
-	zend_throw_error(NULL, "Cannot write property");
-	return FAILURE;
-}
-/* }}} */
-
 /* {{{ beanspeak_register_prop_handler */
 static void
-beanspeak_register_prop_handler(HashTable *handler, char *name, size_t name_len, beanspeak_read_t read_func,
-	beanspeak_write_t write_func)
-{
+beanspeak_register_prop_handler(
+	HashTable *prop_handler,
+	char *prop_name,
+	beanspeak_read_t read_func,
+	beanspeak_write_t write_func,
+	int prop_type
+) {
 	beanspeak_prop_handler hnd;
 	zend_string *str;
 
-	hnd.read_func = read_func ? read_func : beanspeak_read_prop_error;
-	hnd.write_func = write_func ? write_func : beanspeak_write_prop_error;
+	hnd.read_func = read_func;
+	hnd.write_func = write_func;
+	hnd.type = prop_type;
 
-	str = zend_string_init_interned(name, name_len, 1);
+	str = zend_string_init_interned(prop_name, strlen(prop_name), 1);
 
-	zend_hash_add_mem(handler, str, &hnd, sizeof(beanspeak_prop_handler));
+	zend_hash_add_mem(prop_handler, str, &hnd, sizeof(beanspeak_prop_handler));
 	zend_string_release_ex(str, 1);
 }
 /* }}} */
 
-
 static HashTable prop_handler_storage;
-
-/* {{{ beanspeak_prop_handler_storage_init */
-static void
-beanspeak_prop_handler_storage_init()
-{
-	zend_hash_init(&prop_handler_storage, 0, NULL, NULL, 1);
-}
-/* }}} */
-
-/* {{{ beanspeak_prop_handler_storage_destroy */
-static void
-beanspeak_prop_handler_storage_destroy()
-{
-	zend_hash_destroy(&prop_handler_storage);
-}
-/* }}} */
-
-/* {{{ beanspeak_prop_handler_storage_push */
-static void
-beanspeak_prop_handler_storage_push(zend_string *ce_name, HashTable *handler)
-{
-	zend_hash_add_ptr(&prop_handler_storage, ce_name, handler);
-}
-/* }}} */
-
-/* {{{ beanspeak_prop_handler_storage_find */
-static void*
-beanspeak_prop_handler_storage_find(zend_string *ce_name)
-{
-	return zend_hash_find_ptr(&prop_handler_storage, ce_name);
-}
-/* }}} */
 
 /* {{{ beanspeak_objects_set_class */
 static beanspeak_object_t*
@@ -140,7 +96,7 @@ beanspeak_objects_set_class(zend_class_entry *ce_ptr)
 		base_class = base_class->parent;
 	}
 
-	intern->prop_handler = beanspeak_prop_handler_storage_find(base_class->name);
+	intern->prop_handler = zend_hash_find_ptr(&prop_handler_storage, base_class->name);
 
 	zend_object_std_init(&intern->zo, ce_ptr);
 	object_properties_init(&intern->zo, ce_ptr);
@@ -247,8 +203,7 @@ PHP_RINIT_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ PHP_MINIT_FUNCTION
- */
+/* {{{ PHP_MINIT_FUNCTION */
 static PHP_MINIT_FUNCTION(beanspeak)
 {
 	REGISTER_INI_ENTRIES();
@@ -264,13 +219,31 @@ static PHP_MINIT_FUNCTION(beanspeak)
 	memcpy(&beanspeak_client_object_handlers, &beanspeak_object_handlers, sizeof(zend_object_handlers));
 	beanspeak_client_object_handlers.dtor_obj  = zend_objects_destroy_object;
 
-	beanspeak_prop_handler_storage_init();
+	zend_hash_init(&prop_handler_storage, 0, NULL, NULL, 1);
 
 	BEANSPEAK_REGISTER_CLASS(Beanspeak, Client, beanspeak, client, beanspeak_client_method_entry, 0);
 	beanspeak_client_ce_ptr->create_object = beanspeak_create_object;
+
+	/* Declare 'Beanspeak\Client' class properties */
 	zend_hash_init(&beanspeak_client_prop_handlers, 0, NULL, beanspeak_dtor_prop_handler, 1);
-	// TODO: Init client props
-	beanspeak_prop_handler_storage_push(beanspeak_client_ce_ptr->name, &beanspeak_client_prop_handlers);
+
+	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "socket", NULL, NULL, IS_RESOURCE);
+	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "host", NULL, NULL, IS_STRING);
+	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "port", NULL, NULL, IS_LONG);
+	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "timeout", NULL, NULL, IS_LONG);
+	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "persistent", NULL, NULL, _IS_BOOL);
+	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "usedTube", NULL, NULL, IS_STRING);
+	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "watchedTubes", NULL, NULL, IS_ARRAY);
+
+	zend_declare_property_null(beanspeak_client_ce_ptr, ZEND_STRL("socket"), ZEND_ACC_PRIVATE);
+	zend_declare_property_string(beanspeak_client_ce_ptr, ZEND_STRL("host"), "127.0.0.1", ZEND_ACC_PRIVATE);
+	zend_declare_property_long(beanspeak_client_ce_ptr, ZEND_STRL("port"), 11300, ZEND_ACC_PRIVATE);
+	zend_declare_property_long(beanspeak_client_ce_ptr, ZEND_STRL("timeout"), 60, ZEND_ACC_PRIVATE);
+	zend_declare_property_bool(beanspeak_client_ce_ptr, ZEND_STRL("persistent"), true, ZEND_ACC_PRIVATE);
+	zend_declare_property_string(beanspeak_client_ce_ptr, ZEND_STRL("usedTube"), "default", ZEND_ACC_PRIVATE);
+	zend_declare_property_null(beanspeak_client_ce_ptr, ZEND_STRL("watchedTubes"), ZEND_ACC_PRIVATE);
+
+	zend_hash_add_ptr(&prop_handler_storage, beanspeak_client_ce_ptr->name, &beanspeak_client_prop_handlers);
 
 	// TODO:
 	// BEANSPEAK_INIT(Beanspeak_ExceptionInterface);
@@ -280,22 +253,19 @@ static PHP_MINIT_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ PHP_MSHUTDOWN_FUNCTION
- */
+/* {{{ PHP_MSHUTDOWN_FUNCTION */
 static PHP_MSHUTDOWN_FUNCTION(beanspeak)
 {
 	UNREGISTER_INI_ENTRIES();
 
-	// TODO: Destroy handlers
-
-	beanspeak_prop_handler_storage_destroy();
+	zend_hash_destroy(&beanspeak_client_prop_handlers);
+	zend_hash_destroy(&prop_handler_storage);
 
 	return SUCCESS;
 }
 /* }}} */
 
-/* {{{ PHP_MINFO_FUNCTION
- */
+/* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION(beanspeak)
 {
 	php_info_print_box_start(0);
@@ -313,19 +283,13 @@ PHP_MINFO_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ arginfo
- */
-/* }}} */
-
-/* {{{ beanspeak_functions[]
- */
+/* {{{ beanspeak_functions[] */
 static const zend_function_entry beanspeak_functions[] = {
 	PHP_FE_END
 };
 /* }}} */
 
-/* {{{ beanspeak_module_entry
- */
+/* {{{ beanspeak_module_entry */
 zend_module_entry beanspeak_module_entry = {
 	STANDARD_MODULE_HEADER,
 	PHP_BEANSPEAK_EXTNAME,			/* Extension name */

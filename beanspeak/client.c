@@ -8,44 +8,31 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "../config.h"
+#	include "../config.h"
 #endif
 
 #include <php.h>
-#include <Zend/zend_operators.h>
 #include <ext/standard/url.h>
-
 #include "../php_beanspeak.h"
-#include "client.h"
+
+PHP_METHOD(Beanspeak_Client, __construct);
+
+/* {{{ arginfo */
+ZEND_BEGIN_ARG_INFO_EX(arginfo_beanspeak_client_construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO(0, dsn, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+/* }}} */
+
+/* {{{ beanspeak_client_method_entry[] */
+const zend_function_entry beanspeak_client_method_entry[] = {
+	PHP_ME(Beanspeak_Client, __construct, arginfo_beanspeak_client_construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_FE_END
+};
+/* }}} */
+
 #include "exception.h"
 
 zend_class_entry *beanspeak_client_ce_ptr;
-
-/* {{{ beanspeak_client_init_properties
- * Declare 'Beanspeak\Client' class properties. */
-static void
-beanspeak_client_init_properties(zend_class_entry *ce_ptr)
-{
-	zend_declare_property_null(ce_ptr, ZEND_STRL("socket"), ZEND_ACC_PRIVATE TSRMLS_CC);
-	zend_declare_property_string(ce_ptr, ZEND_STRL("host"), "127.0.0.1", ZEND_ACC_PRIVATE TSRMLS_CC);
-	zend_declare_property_long(ce_ptr, ZEND_STRL("port"), 11300, ZEND_ACC_PRIVATE TSRMLS_CC);
-	zend_declare_property_long(ce_ptr, ZEND_STRL("timeout"), 60, ZEND_ACC_PRIVATE TSRMLS_CC);
-	zend_declare_property_bool(ce_ptr, ZEND_STRL("persistent"), true, ZEND_ACC_PRIVATE TSRMLS_CC);
-	zend_declare_property_string(ce_ptr, ZEND_STRL("usedTube"), "default", ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(ce_ptr, ZEND_STRL("watchedTubes"), ZEND_ACC_PROTECTED TSRMLS_CC);
-}
-/* }}} */
-
-/* {{{ beanspeak_Beanspeak_Client_init
- * Create and register 'Beanspeak\Client' class. */
-BEANSPEAK_INIT_CLASS(Beanspeak_Client) {
-	BEANSPEAK_REGISTER_CLASS(Beanspeak, Client, beanspeak, client, beanspeak_client_method_entry, 0);
-
-	beanspeak_client_init_properties(beanspeak_client_ce_ptr);
-
-	return SUCCESS;
-}
-/* }}} */
 
 /* {{{ beanspeak_client_instance */
 static int
