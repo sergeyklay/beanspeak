@@ -5,8 +5,7 @@ ARG_ENABLE('beanspeak-debug', "Whether to enable debugging support in Beanspeak"
 
 if (PHP_BEANSPEAK != "no") {
     var beanspeak_sources = "beanspeak\\client.c beanspeak\\exception.c";
-    var beanspeak_headers = "php_beanspeak.h beanspeak\\common.h beanspeak\\methods.h " +
-                            "beanspeak\\client.h beanspeak\\exception.h";
+    var beanspeak_headers = "php_beanspeak.h beanspeak\\common.h beanspeak\\methods.h beanspeak\\classes.h";
 
     var ext_flags = "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 " +
                     "-I" + configure_module_dirname + " " +

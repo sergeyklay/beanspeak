@@ -18,11 +18,11 @@
 #include <Zend/zend_object_handlers.h>
 #include <Zend/zend_operators.h>
 #include <Zend/zend_portability.h>
+#include <Zend/zend_exceptions.h>
 #include <ext/standard/info.h>
+#include <ext/spl/spl_exceptions.h>
 
 #include "php_beanspeak.h"
-// TODO:
-// #include "beanspeak/exception.h"
 
 /* {{{ class entries */
 PHP_BEANSPEAK_API zend_class_entry *beanspeak_client_ce_ptr;
@@ -83,7 +83,12 @@ static HashTable prop_handler_storage;
 static beanspeak_object_t*
 beanspeak_objects_set_class(zend_class_entry *ce_ptr)
 {
+#if PHP_VERSION_ID >= 70300
+	beanspeak_object_t *intern = zend_object_alloc(sizeof(beanspeak_object_t), ce_ptr);
+#else
 	beanspeak_object_t *intern = ecalloc(1, sizeof(beanspeak_object_t) + zend_object_properties_size(ce_ptr));
+#endif
+
 	zend_class_entry *base_class = ce_ptr;
 
 	while (
@@ -186,6 +191,37 @@ beanspeak_write_property(zval *object, zval *member, zval *value, void **cache_s
 }
 /* }}} */
 
+/* {{{ beanspeak_get_exception_ce */
+zend_class_entry*
+beanspeak_get_exception_ce(beanspeak_exception_type_t type)
+{
+	switch (type) {
+		default:
+		case INVALID_ARGUMENT:
+			return beanspeak_invalidargumentexception_ce_ptr;
+	}
+}
+/* }}} */
+
+/* {{{ beanspeak_throw_exception */
+zend_object*
+beanspeak_throw_exception(beanspeak_exception_type_t type, const char *fmt, ...)
+{
+	char *msg;
+	zend_object *exception;
+	va_list argv;
+
+	va_start(argv, fmt);
+	vspprintf(&msg, 0, fmt, argv);
+	va_end(argv);
+
+	exception = zend_throw_exception(beanspeak_get_exception_ce(type), msg, type);
+	efree(msg);
+
+	return exception;
+}
+/* }}} */
+
 /* {{{ INI_ENTRIES */
 PHP_INI_BEGIN()
 
@@ -221,6 +257,7 @@ static PHP_MINIT_FUNCTION(beanspeak)
 
 	zend_hash_init(&prop_handler_storage, 0, NULL, NULL, 1);
 
+	/* Create and register 'Beanspeak\Client' class */
 	BEANSPEAK_REGISTER_CLASS(Beanspeak, Client, beanspeak, client, beanspeak_client_method_entry, 0);
 	beanspeak_client_ce_ptr->create_object = beanspeak_create_object;
 
@@ -245,9 +282,15 @@ static PHP_MINIT_FUNCTION(beanspeak)
 
 	zend_hash_add_ptr(&prop_handler_storage, beanspeak_client_ce_ptr->name, &beanspeak_client_prop_handlers);
 
-	// TODO:
-	// BEANSPEAK_INIT(Beanspeak_ExceptionInterface);
-	// BEANSPEAK_INIT(Beanspeak_InvalidArgumentException);
+	/* Create and register 'Beanspeak\Exception\ExceptionInterface' interface */
+	BEANSPEAK_REGISTER_CLASS(Beanspeak\\Exception, ExceptionInterface, beanspeak,
+							 exceptioninterface, beanspeak_exception_method_entry, ZEND_ACC_INTERFACE);
+	zend_class_implements(beanspeak_exceptioninterface_ce_ptr, 1, zend_ce_throwable);
+
+	/* Create and register 'Beanspeak\Exception\InvalidArgumentException' class */
+	BEANSPEAK_REGISTER_CLASS_EX(Beanspeak\\Exception, InvalidArgumentException, beanspeak, invalidargumentexception,
+								spl_ce_InvalidArgumentException, beanspeak_exception_method_entry, 0);
+	zend_class_implements(beanspeak_invalidargumentexception_ce_ptr, 1, beanspeak_exceptioninterface_ce_ptr);
 
 	return SUCCESS;
 }

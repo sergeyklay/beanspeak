@@ -16,10 +16,11 @@ beanspeak_obj_from_zo(zend_object *obj)
 }
 /* }}} */
 
-#define Z_BEANSPEAK_OBJ_P(zv) beanspeak_obj_from_zo(Z_OBJ_P((zv)))
+typedef enum _beanspeak_exception_type {
+	INVALID_ARGUMENT
+} beanspeak_exception_type_t;
 
-#define BEANSPEAK_INIT_CLASS(name) \
-	int beanspeak_ ##name## _init(INIT_FUNC_ARGS)
+#define Z_BEANSPEAK_OBJ_P(zv) beanspeak_obj_from_zo(Z_OBJ_P((zv)))
 
 /* class/interface registering */
 #define BEANSPEAK_REGISTER_CLASS(ns, cl, lns, n, m, f)					\
@@ -56,14 +57,6 @@ beanspeak_obj_from_zo(zend_object *obj)
 		}																			\
 		lns## _ ##n## _ce_ptr->ce_flags |= f;										\
 	}
-
-#define BEANSPEAK_INIT(name)												\
-	if (beanspeak_ ##name## _init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) {	\
-		return FAILURE;														\
-	}
-
-#define BEANSPEAK_INIT_FUNCS(class_functions)	\
-	static const zend_function_entry class_functions[] =
 
 #define BEANSPEAK_INIT_THIS()					\
 	zval this_zv;								\

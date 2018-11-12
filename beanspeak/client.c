@@ -13,9 +13,8 @@
 
 #include <php.h>
 #include <ext/standard/url.h>
-#include "../php_beanspeak.h"
 
-PHP_METHOD(Beanspeak_Client, __construct);
+#include "../php_beanspeak.h"
 
 /* {{{ arginfo */
 ZEND_BEGIN_ARG_INFO_EX(arginfo_beanspeak_client_construct, 0, 0, 0)
@@ -30,10 +29,6 @@ const zend_function_entry beanspeak_client_method_entry[] = {
 };
 /* }}} */
 
-#include "exception.h"
-
-zend_class_entry *beanspeak_client_ce_ptr;
-
 /* {{{ beanspeak_client_instance */
 static int
 beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t dsn_len)
@@ -46,12 +41,12 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 
 	/* php_url_parse_ex() crashes by processing chars exceed len */
 	if (strlen(dsn_str) != dsn_len) {
-		throw_exception(INVALID_ARGUMENT, "Client DSN contains invalid characters (\\0).");
+		beanspeak_throw_exception(INVALID_ARGUMENT, "Client DSN contains invalid characters (\\0).");
 		return FAILURE;
 	}
 
 	if (!(uri = php_url_parse_ex(dsn_str, dsn_len))) {
-		throw_exception(INVALID_ARGUMENT, "The beanstalkd connection DSN is invalid: '%s'.", dsn_str);
+		beanspeak_throw_exception(INVALID_ARGUMENT, "The beanstalkd connection DSN is invalid: '%s'.", dsn_str);
 		return FAILURE;
 	}
 
@@ -66,14 +61,14 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 #else
 		if (strncasecmp("unix", uri->scheme, sizeof("unix")) == 0) {
 #endif
-			throw_exception(INVALID_ARGUMENT, "Protocol 'unix' currently disabled in Beanspeak Client.");
+			beanspeak_throw_exception(INVALID_ARGUMENT, "Protocol 'unix' currently disabled in Beanspeak Client.");
 			php_url_free(uri);
 			return FAILURE;
 		}
 
 #if PHP_VERSION_ID >= 70300
 		if (strncasecmp("tcp", ZSTR_VAL(uri->scheme), sizeof("tcp")) != 0) {
-			throw_exception(INVALID_ARGUMENT,
+			beanspeak_throw_exception(INVALID_ARGUMENT,
 				"Invalid DSN scheme. Supported schemes are either 'tcp' or 'unix' (disabled), got '%s'.",
 				ZSTR_VAL(uri->scheme)
 			);
@@ -103,7 +98,7 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 		zend_update_property_string(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("host"), uri->path);
 #endif
 	} else {
-		throw_exception(INVALID_ARGUMENT, "Invalid Client DSN scheme: missed host part.");
+		beanspeak_throw_exception(INVALID_ARGUMENT, "Invalid Client DSN scheme: missed host part.");
 		php_url_free(uri);
 		return FAILURE;
 	}
