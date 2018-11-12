@@ -44,6 +44,8 @@ typedef enum {false = 0, true = 1} bool;
 
 #include "beanspeak/common.h"
 
+zend_object* beanspeak_create_object(zend_class_entry* ce_ptr);
+
 extern zend_module_entry beanspeak_module_entry;
 #define phpext_beanspeak_ptr &beanspeak_module_entry
 

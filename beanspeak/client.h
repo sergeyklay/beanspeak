@@ -12,10 +12,9 @@
 
 #include "../php_beanspeak.h"
 
-BEANSPEAK_API extern zend_class_entry *beanspeak_client_ce_ptr;
-extern zend_object_handlers beanspeak_client_handlers;
+PHP_BEANSPEAK_API extern zend_class_entry *beanspeak_client_ce_ptr;
 
-typedef struct {
+typedef struct _beanspeak_client_object {
 	zval			socket;			/* current socket connection */
 	zend_string*	host;			/* the beanstalkd server hostname or IP address to connect to */
 	uint16_t		port;			/* the port of the server to connect to */
@@ -23,6 +22,7 @@ typedef struct {
 	bool			persistent;		/* whether to make the connection persistent or not */
 	zend_string*	usedTube;		/* current used tube */
 	zval			watchedTubes;	/* current watched tubes */
+	HashTable*		prop_handler;
 	zend_object		zo;
 } beanspeak_client_object_t;
 
@@ -37,7 +37,7 @@ ZEND_END_ARG_INFO()
 /* }}} */
 
 /* {{{ beanspeak_client_method_entry */
-BEANSPEAK_INIT_FUNCS(beanspeak_client_method_entry) {
+static const zend_function_entry beanspeak_client_method_entry[] = {
 	PHP_ME(Beanspeak_Client, __construct, arginfo_beanspeak_client_construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_FE_END
 };
