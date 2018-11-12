@@ -17,7 +17,7 @@
 #include <Zend/zend_operators.h>
 
 #ifdef HAVE_STDINT_H
-#include <stdint.h>
+#	include <stdint.h>
 #else
 typedef __int16 int16_t;
 typedef unsigned __int16 int16_t;
@@ -28,19 +28,19 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #ifdef HAVE_STDBOOL_H
-#include <stdbool.h>
+#	include <stdbool.h>
 #else
 typedef enum {false = 0, true = 1} bool;
 #endif
 
 #ifdef PHP_WIN32
-#define BEANSPEAK_API __declspec(dllimport)
+#	define PHP_BEANSPEAK_API __declspec(dllimport)
 #elif defined(__GNUC__) && __GNUC__ >= 4
-#define BEANSPEAK_API __attribute__ ((visibility("default")))
+#	define PHP_BEANSPEAK_API __attribute__ ((visibility("default")))
 #elif defined(PHPAPI)
-#define BEANSPEAK_API PHPAPI
+#	define PHP_BEANSPEAK_API PHPAPI
 #else
-#define BEANSPEAK_API
+#	define PHP_BEANSPEAK_API
 #endif
 
 #define BEANSPEAK_INIT_CLASS(name) \
@@ -87,9 +87,6 @@ typedef enum {false = 0, true = 1} bool;
 		return FAILURE;														\
 	}
 
-#define BEANSPEAK_INIT_FUNCS(class_functions)	\
-	static const zend_function_entry class_functions[] =
-
 #define BEANSPEAK_INIT_THIS()					\
 	zval this_zv;								\
 	zval *this_ptr = getThis();					\
@@ -99,19 +96,6 @@ typedef enum {false = 0, true = 1} bool;
 	} else {									\
 		ZVAL_NULL(&this_zv);					\
 		this_ptr = &this_zv;					\
-	}
-
-#define BEANSPEAK_PROPERTY_HANDLER_PROLOG						\
-	zval tmp_member;											\
-	if (Z_TYPE_P(member) != IS_STRING) {						\
-		ZVAL_STR(&tmp_member, zval_get_string_func(member));	\
-		member = &tmp_member;									\
-		cache_slot = NULL;										\
-	}
-
-#define BEANSPEAK_PROPERTY_HANDLER_EPILOG	\
-	if (member == &tmp_member) {			\
-		zval_ptr_dtor_str(&tmp_member);		\
 	}
 
 extern zend_module_entry beanspeak_module_entry;

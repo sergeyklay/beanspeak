@@ -12,7 +12,7 @@
 
 #include "../php_beanspeak.h"
 
-BEANSPEAK_API extern zend_class_entry *beanspeak_client_ce_ptr;
+extern PHP_BEANSPEAK_API zend_class_entry *beanspeak_client_ce_ptr;
 extern zend_object_handlers beanspeak_client_handlers;
 
 typedef struct {
@@ -26,7 +26,7 @@ typedef struct {
 	zend_object		zo;
 } beanspeak_client_object_t;
 
-BEANSPEAK_INIT_CLASS(Beanspeak_Client);
+BEANSPEAK_INIT_CLASS(Client);
 
 PHP_METHOD(Beanspeak_Client, __construct);
 
@@ -37,7 +37,7 @@ ZEND_END_ARG_INFO()
 /* }}} */
 
 /* {{{ beanspeak_client_method_entry */
-BEANSPEAK_INIT_FUNCS(beanspeak_client_method_entry) {
+static const zend_function_entry beanspeak_client_method_entry[] = {
 	PHP_ME(Beanspeak_Client, __construct, arginfo_beanspeak_client_construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_FE_END
 };
