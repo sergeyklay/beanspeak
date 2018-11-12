@@ -8,7 +8,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#	include "config.h"
 #endif
 
 #include <php.h>
@@ -19,16 +19,14 @@
 #include "beanspeak/client.h"
 #include "beanspeak/exception.h"
 
-/* {{{ INI_ENTRIES
- */
+/* {{{ INI_ENTRIES */
 PHP_INI_BEGIN()
 
 PHP_INI_END()
 /* }}} */
 
-/* {{{ PHP_RINIT_FUNCTION
- */
-PHP_RINIT_FUNCTION(beanspeak)
+/* {{{ PHP_RINIT_FUNCTION */
+static PHP_RINIT_FUNCTION(beanspeak)
 {
 #if defined(ZTS) && defined(COMPILE_DL_BEANSPEAK)
 	ZEND_TSRMLS_CACHE_UPDATE()
@@ -38,22 +36,20 @@ PHP_RINIT_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ PHP_MINIT_FUNCTION
- */
+/* {{{ PHP_MINIT_FUNCTION */
 static PHP_MINIT_FUNCTION(beanspeak)
 {
 	REGISTER_INI_ENTRIES();
 
-	BEANSPEAK_INIT(Beanspeak_Client);
-	BEANSPEAK_INIT(Beanspeak_ExceptionInterface);
-	BEANSPEAK_INIT(Beanspeak_InvalidArgumentException);
+	BEANSPEAK_INIT(Client);
+	BEANSPEAK_INIT(ExceptionInterface);
+	BEANSPEAK_INIT(InvalidArgumentException);
 
 	return SUCCESS;
 }
 /* }}} */
 
-/* {{{ PHP_MSHUTDOWN_FUNCTION
- */
+/* {{{ PHP_MSHUTDOWN_FUNCTION */
 static PHP_MSHUTDOWN_FUNCTION(beanspeak)
 {
 	UNREGISTER_INI_ENTRIES();
@@ -62,9 +58,8 @@ static PHP_MSHUTDOWN_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ PHP_MINFO_FUNCTION
- */
-PHP_MINFO_FUNCTION(beanspeak)
+/* {{{ PHP_MINFO_FUNCTION */
+static PHP_MINFO_FUNCTION(beanspeak)
 {
 	php_info_print_box_start(0);
 	php_printf("%s", PHP_BEANSPEAK_DESCRIPTION);
@@ -81,31 +76,31 @@ PHP_MINFO_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ arginfo
- */
-/* }}} */
-
-/* {{{ beanspeak_functions[]
- */
 static const zend_function_entry beanspeak_functions[] = {
 	PHP_FE_END
 };
-/* }}} */
 
-/* {{{ beanspeak_module_entry
- */
+static const zend_module_dep beanspeak_deps[] = {
+	ZEND_MOD_REQUIRED("spl")
+	ZEND_MOD_REQUIRED("standard")
+	ZEND_MOD_END
+};
+
+/* {{{ beanspeak_module_entry */
 zend_module_entry beanspeak_module_entry = {
-	STANDARD_MODULE_HEADER,
-	PHP_BEANSPEAK_EXTNAME,			/* Extension name */
-	beanspeak_functions,			/* zend_function_entry */
-	PHP_MINIT(beanspeak) ,			/* PHP_MINIT - Module initialization */
-	PHP_MSHUTDOWN(beanspeak),		/* PHP_MSHUTDOWN - Module shutdown */
-	PHP_RINIT(beanspeak),			/* PHP_RINIT - Request initialization */
-	NULL,							/* PHP_RSHUTDOWN - Request shutdown */
-	PHP_MINFO(beanspeak),			/* PHP_MINFO - Module info */
-	PHP_BEANSPEAK_VERSION,			/* Version */
-	NO_MODULE_GLOBALS,				/* Globals, and the latter is a pointer directly to the globals */
-	NULL,							/* This function is called by Zend after request shutdown. It is rarely used */
+	STANDARD_MODULE_HEADER_EX,
+	NULL,
+	beanspeak_deps,
+	PHP_BEANSPEAK_EXTNAME,
+	beanspeak_functions,
+	PHP_MINIT(beanspeak),
+	PHP_MSHUTDOWN(beanspeak),
+	PHP_RINIT(beanspeak),
+	NULL,
+	PHP_MINFO(beanspeak),
+	PHP_BEANSPEAK_VERSION,
+	NO_MODULE_GLOBALS,
+	NULL,
 	STANDARD_MODULE_PROPERTIES_EX
 };
 /* }}} */

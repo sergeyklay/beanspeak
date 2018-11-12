@@ -7,27 +7,31 @@
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
 
-PROJECT_ROOT=$(readlink -enq "$(dirname $0)/../")
-
-PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
-PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
+PHP_VERNUM="$(`phpenv which php-config` --vernum)"
 
 shopt -s nullglob
 
-pushd "${PROJECT_ROOT}"
+export NO_INTERACTION=1
+export REPORT_EXIT_STATUS=1
+export ZEND_DONT_UNLOAD_MODULES=1
+export USE_ZEND_ALLOC=0
 
-	export NO_INTERACTION=1
-	export REPORT_EXIT_STATUS=1
-	export ZEND_DONT_UNLOAD_MODULES=1
-	export USE_ZEND_ALLOC=0
-	export TEST_PHP_EXECUTABLE=$(phpenv which php)
-
-	# PHP 7.3 - 7.4 sill have memory leaks
-	if [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.4" ] || [ "${PHP_MAJOR}.${PHP_MINOR}" = "7.3" ]; then
-		$(phpenv which php) run-tests.php -d extension=beanspeak.so -d extension_dir=./modules -n ./tests/*.phpt
-	else
+if [ "${PHP_VERNUM}" -lt 70300 ]; then
+	if [ $(command -v valgrind 2>/dev/null) != "" ]; then
 		export TEST_PHP_ARGS=-m
-		$(phpenv which php) run-tests.php -d extension=beanspeak.so -d extension_dir=./modules -n ./tests/*.phpt
+	else
+		>&2 echo "Skip check for memory leaks. Valgring does not exist"
 	fi
+else
+	>&2 echo "Skip check for memory leaks due to unstable PHP version"
+fi
 
-popd
+php run-tests.php \
+	-d extension=beanspeak.so \
+	-d extension_dir=modules \
+	-n \
+	-g "FAIL,XFAIL,SKIP,BORK,WARN,LEAK" \
+	-p $(phpenv which php) \
+	tests
+
+exit $?
