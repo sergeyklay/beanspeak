@@ -8,8 +8,7 @@ typedef struct _beanspeak_object {
 	zend_object zo;
 } beanspeak_object_t;
 
-/* {{{ beanspeak_obj_from_zo */
-static inline beanspeak_object_t*
+static zend_always_inline beanspeak_object_t* /* {{{ */
 beanspeak_obj_from_zo(zend_object *obj)
 {
 	return (beanspeak_object_t*)((char*)(obj) - XtOffsetOf(beanspeak_object_t, zo));
@@ -71,7 +70,7 @@ typedef enum _beanspeak_exception_type {
 
 #define BEANSPEAK_PROPERTY_HANDLER_PROLOG						\
 	zval tmp_member;											\
-	if (Z_TYPE_P(member) != IS_STRING) {						\
+	if (UNEXPECTED(Z_TYPE_P(member) != IS_STRING)) {			\
 		ZVAL_STR(&tmp_member, zval_get_string_func(member));	\
 		member = &tmp_member;									\
 		cache_slot = NULL;										\

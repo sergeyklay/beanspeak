@@ -15,6 +15,11 @@
 #include <Zend/zend_modules.h>
 #include <Zend/zend_operators.h>
 
+#define PHP_BEANSPEAK_VERSION		"1.0.0"
+#define PHP_BEANSPEAK_EXTNAME		"beanspeak"
+#define PHP_BEANSPEAK_AUTHOR		"Serghei Iakovlev"
+#define PHP_BEANSPEAK_DESCRIPTION	"A PHP client library for the beanstalkd queue server."
+
 #ifdef HAVE_STDINT_H
 #	include <stdint.h>
 #else
@@ -45,6 +50,7 @@ typedef enum {false = 0, true = 1} bool;
 #include "beanspeak/common.h"
 #include "beanspeak/methods.h"
 #include "beanspeak/classes.h"
+#include "beanspeak/properties.h"
 
 zend_object* beanspeak_create_object(zend_class_entry *ce_ptr);
 zend_class_entry *beanspeak_get_exception_ce(beanspeak_exception_type_t type);
@@ -53,10 +59,7 @@ zend_object *beanspeak_throw_exception(beanspeak_exception_type_t type, const ch
 extern zend_module_entry beanspeak_module_entry;
 #define phpext_beanspeak_ptr &beanspeak_module_entry
 
-#define PHP_BEANSPEAK_VERSION		"1.0.0"
-#define PHP_BEANSPEAK_EXTNAME		"beanspeak"
-#define PHP_BEANSPEAK_AUTHOR		"Serghei Iakovlev"
-#define PHP_BEANSPEAK_DESCRIPTION	"A PHP client library for the beanstalkd queue server."
+
 
 #if defined(ZTS) && defined(COMPILE_DL_BEANSPEAK)
 ZEND_TSRMLS_CACHE_EXTERN()

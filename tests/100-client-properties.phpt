@@ -15,5 +15,5 @@ private $host;
 private $port;
 private $timeout;
 private $persistent;
-protected $usedTube;
-protected $watchedTubes;
+private $usedTube;
+private $watchedTubes;

@@ -46,17 +46,15 @@ typedef struct _beanspeak_prop_handler {
 	int type;
 } beanspeak_prop_handler;
 
-/* {{{ beanspeak_dtor_prop_handler */
-static void
-beanspeak_dtor_prop_handler(zval *zv)
+static void /* {{{ */
+dtor_prop_handler(zval *zv)
 {
 	free(Z_PTR_P(zv));
 }
 /* }}} */
 
-/* {{{ beanspeak_register_prop_handler */
-static void
-beanspeak_register_prop_handler(
+static zend_always_inline void /* {{{ */
+register_prop_handler(
 	HashTable *prop_handler,
 	char *prop_name,
 	beanspeak_read_t read_func,
@@ -79,9 +77,8 @@ beanspeak_register_prop_handler(
 
 static HashTable prop_handler_storage;
 
-/* {{{ beanspeak_objects_set_class */
-static beanspeak_object_t*
-beanspeak_objects_set_class(zend_class_entry *ce_ptr)
+static beanspeak_object_t* /* {{{ */
+objects_set_class(zend_class_entry *ce_ptr)
 {
 #if PHP_VERSION_ID >= 70300
 	beanspeak_object_t *intern = zend_object_alloc(sizeof(beanspeak_object_t), ce_ptr);
@@ -110,9 +107,8 @@ beanspeak_objects_set_class(zend_class_entry *ce_ptr)
 }
 /* }}} */
 
-/* {{{ beanspeak_get_object_handlers */
-static zend_object_handlers*
-beanspeak_get_object_handlers(void) {
+static zend_object_handlers* /* {{{ */
+get_object_handlers(void) {
 	return &beanspeak_object_handlers;
 }
 /* }}} */
@@ -121,25 +117,23 @@ beanspeak_get_object_handlers(void) {
 zend_object*
 beanspeak_create_object(zend_class_entry* ce_ptr)
 {
-	beanspeak_object_t* intern = beanspeak_objects_set_class(ce_ptr);
+	beanspeak_object_t* intern = objects_set_class(ce_ptr);
 
-	intern->zo.handlers = beanspeak_get_object_handlers();
+	intern->zo.handlers = get_object_handlers();
 	return &intern->zo;
 }
 /* }}} */
 
-/* {{{ beanspeak_objects_free_storage */
-static void
-beanspeak_objects_free_storage(zend_object *object)
+static void /* {{{ */
+objects_free_storage(zend_object *object)
 {
 	beanspeak_object_t *intern = beanspeak_obj_from_zo(object);
 
 	zend_object_std_dtor(&intern->zo);
 }
 
-/* {{{ beanspeak_read_property */
-static zval*
-beanspeak_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv)
+static zval* /* {{{ */
+read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv)
 {
 	beanspeak_object_t *obj = Z_BEANSPEAK_OBJ_P(object);
 	zval *retval;
@@ -168,9 +162,8 @@ beanspeak_read_property(zval *object, zval *member, int type, void **cache_slot,
 }
 /* }}} */
 
-/* {{{ beanspeak_write_property */
-static void
-beanspeak_write_property(zval *object, zval *member, zval *value, void **cache_slot)
+static void /* {{{ */
+write_property(zval *object, zval *member, zval *value, void **cache_slot)
 {
 	beanspeak_object_t *obj = Z_BEANSPEAK_OBJ_P(object);
 	beanspeak_prop_handler *hnd = NULL;
@@ -247,9 +240,9 @@ static PHP_MINIT_FUNCTION(beanspeak)
 	memcpy(&beanspeak_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	beanspeak_object_handlers.offset = (int) XtOffsetOf(beanspeak_object_t, zo);
-	beanspeak_object_handlers.free_obj = beanspeak_objects_free_storage;
-	beanspeak_object_handlers.read_property = beanspeak_read_property;
-	beanspeak_object_handlers.write_property = beanspeak_write_property;
+	beanspeak_object_handlers.free_obj = objects_free_storage;
+	beanspeak_object_handlers.read_property = read_property;
+	beanspeak_object_handlers.write_property = write_property;
 	beanspeak_object_handlers.clone_obj = NULL; /* TODO: has no clone implementation */
 
 	memcpy(&beanspeak_client_object_handlers, &beanspeak_object_handlers, sizeof(zend_object_handlers));
@@ -262,15 +255,15 @@ static PHP_MINIT_FUNCTION(beanspeak)
 	beanspeak_client_ce_ptr->create_object = beanspeak_create_object;
 
 	/* Declare 'Beanspeak\Client' class properties */
-	zend_hash_init(&beanspeak_client_prop_handlers, 0, NULL, beanspeak_dtor_prop_handler, 1);
+	zend_hash_init(&beanspeak_client_prop_handlers, 0, NULL, dtor_prop_handler, 1);
 
-	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "socket", NULL, NULL, IS_RESOURCE);
-	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "host", NULL, NULL, IS_STRING);
-	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "port", NULL, NULL, IS_LONG);
-	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "timeout", NULL, NULL, IS_LONG);
-	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "persistent", NULL, NULL, _IS_BOOL);
-	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "usedTube", NULL, NULL, IS_STRING);
-	beanspeak_register_prop_handler(&beanspeak_client_prop_handlers, "watchedTubes", NULL, NULL, IS_ARRAY);
+	register_prop_handler(&beanspeak_client_prop_handlers, "socket", beanspeak_client_socket_read, NULL, IS_NULL);
+	register_prop_handler(&beanspeak_client_prop_handlers, "host", beanspeak_client_host_read, NULL, IS_STRING);
+	register_prop_handler(&beanspeak_client_prop_handlers, "port", beanspeak_client_port_read, NULL, IS_LONG);
+	register_prop_handler(&beanspeak_client_prop_handlers, "timeout", beanspeak_client_timeout_read, NULL, IS_LONG);
+	register_prop_handler(&beanspeak_client_prop_handlers, "persistent", beanspeak_client_persistent_read, NULL, _IS_BOOL);
+	register_prop_handler(&beanspeak_client_prop_handlers, "usedTube", beanspeak_client_usedTube_read, NULL, IS_STRING);
+	register_prop_handler(&beanspeak_client_prop_handlers, "watchedTubes", beanspeak_client_watchedTubes_read, NULL, IS_ARRAY);
 
 	zend_declare_property_null(beanspeak_client_ce_ptr, ZEND_STRL("socket"), ZEND_ACC_PRIVATE);
 	zend_declare_property_string(beanspeak_client_ce_ptr, ZEND_STRL("host"), "127.0.0.1", ZEND_ACC_PRIVATE);

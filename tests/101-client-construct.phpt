@@ -19,5 +19,5 @@ private $host = 127.0.0.1;
 private $port = 11300;
 private $timeout = 60;
 private $persistent = 1;
-protected $usedTube = default;
-protected $watchedTubes = NULL;
+private $usedTube = default;
+private $watchedTubes = NULL;

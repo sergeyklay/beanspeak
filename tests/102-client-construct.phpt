@@ -12,13 +12,14 @@ var_dump($prop->getValue($cl));
 
 $cl = new Beanspeak\Client('192.169.0.1:299');
 $reflect = new ReflectionClass(Beanspeak\Client::class);
-$host = $reflect->getProperty('host');
-$port = $reflect->getProperty('port');
-$host->setAccessible(true);
-$port->setAccessible(true);
-var_dump($host->getValue($cl));
-var_dump($port->getValue($cl));
 
+$host = $reflect->getProperty('host');
+$host->setAccessible(true);
+var_dump($host->getValue($cl));
+
+$port = $reflect->getProperty('port');
+$port->setAccessible(true);
+var_dump($port->getValue($cl));
 ?>
 --EXPECT--
 string(9) "128.7.6.5"

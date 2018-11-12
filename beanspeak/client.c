@@ -29,9 +29,8 @@ const zend_function_entry beanspeak_client_method_entry[] = {
 };
 /* }}} */
 
-/* {{{ beanspeak_client_instance */
-static int
-beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t dsn_len)
+static int /* {{{  */
+client_initialize(zval *this_ptr, const char *dsn_str, const size_t dsn_len)
 {
 	php_url *uri;
 
@@ -116,6 +115,83 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 }
 /* }}} */
 
+/* {{{ socket	mixed
+readonly=yes
+*/
+int
+beanspeak_client_socket_read(beanspeak_object_t *obj, zval *retval)
+{
+	// TODO: not implemented yet
+	ZVAL_NULL(retval);
+	return SUCCESS;
+}
+
+/* {{{ host	string
+readonly=yes
+*/
+int
+beanspeak_client_host_read(beanspeak_object_t *obj, zval *retval)
+{
+	// TODO: not implemented yet
+	ZVAL_NULL(retval);
+	return SUCCESS;
+}
+
+/* {{{ port	int
+readonly=yes
+*/
+int
+beanspeak_client_port_read(beanspeak_object_t *obj, zval *retval)
+{
+	// TODO: not implemented yet
+	ZVAL_NULL(retval);
+	return SUCCESS;
+}
+
+/* {{{ timeout	int
+readonly=yes
+*/
+int
+beanspeak_client_timeout_read(beanspeak_object_t *obj, zval *retval)
+{
+	// TODO: not implemented yet
+	ZVAL_NULL(retval);
+	return SUCCESS;
+}
+
+/* {{{ persistent	bool
+readonly=yes
+*/
+int
+beanspeak_client_persistent_read(beanspeak_object_t *obj, zval *retval)
+{
+	// TODO: not implemented yet
+	ZVAL_NULL(retval);
+	return SUCCESS;
+}
+
+/* {{{ usedTube	string
+readonly=yes
+*/
+int
+beanspeak_client_usedTube_read(beanspeak_object_t *obj, zval *retval)
+{
+	// TODO: not implemented yet
+	ZVAL_NULL(retval);
+	return SUCCESS;
+}
+
+/* {{{ watchedTubes	array
+readonly=yes
+*/
+int
+beanspeak_client_watchedTubes_read(beanspeak_object_t *obj, zval *retval)
+{
+	// TODO: not implemented yet
+	ZVAL_NULL(retval);
+	return SUCCESS;
+}
+
 /* {{{ proto public Beanspeak\Client::__construct([string $dsn = NULL]) */
 PHP_METHOD(Beanspeak_Client, __construct) {
 	char *dsn_str = "";
@@ -129,7 +205,7 @@ PHP_METHOD(Beanspeak_Client, __construct) {
 
 	if (dsn_len != 0) {
 		/* the dsn string was provided. initialize connection options */
-		beanspeak_client_initialize(this_ptr, dsn_str, dsn_len);
+		client_initialize(this_ptr, dsn_str, dsn_len);
 	}
 }
 /* }}} */
