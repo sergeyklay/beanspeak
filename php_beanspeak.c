@@ -76,15 +76,21 @@ static PHP_MINFO_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ beanspeak_functions[] */
 static const zend_function_entry beanspeak_functions[] = {
 	PHP_FE_END
 };
-/* }}} */
+
+static const zend_module_dep beanspeak_deps[] = {
+	ZEND_MOD_REQUIRED("spl")
+	ZEND_MOD_REQUIRED("standard")
+	ZEND_MOD_END
+};
 
 /* {{{ beanspeak_module_entry */
 zend_module_entry beanspeak_module_entry = {
-	STANDARD_MODULE_HEADER,
+	STANDARD_MODULE_HEADER_EX,
+	NULL,
+	beanspeak_deps,
 	PHP_BEANSPEAK_EXTNAME,
 	beanspeak_functions,
 	PHP_MINIT(beanspeak),
