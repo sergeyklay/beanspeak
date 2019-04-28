@@ -41,9 +41,17 @@ static PHP_MINIT_FUNCTION(beanspeak)
 {
 	REGISTER_INI_ENTRIES();
 
-	BEANSPEAK_INIT(Beanspeak_Client);
-	BEANSPEAK_INIT(Beanspeak_ExceptionInterface);
-	BEANSPEAK_INIT(Beanspeak_InvalidArgumentException);
+	if (beanspeak_Beanspeak_Client_init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) {
+		return FAILURE;
+	}
+
+	if (beanspeak_Beanspeak_ExceptionInterface_init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) {
+		return FAILURE;
+	}
+
+   	if (beanspeak_Beanspeak_InvalidArgumentException_init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) {
+		return FAILURE;
+	}
 
 	return SUCCESS;
 }

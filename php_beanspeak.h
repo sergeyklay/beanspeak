@@ -55,9 +55,6 @@ typedef enum {false = 0, true = 1} bool;
 #define BEANSPEAK_API
 #endif
 
-#define BEANSPEAK_INIT_CLASS(name) \
-	int beanspeak_ ##name## _init(INIT_FUNC_ARGS)
-
 /* class/interface registering */
 #define BEANSPEAK_REGISTER_CLASS(ns, cl, lns, n, m, f) \
 	{ \
@@ -93,11 +90,6 @@ typedef enum {false = 0, true = 1} bool;
 		lns## _ ##n## _ce_ptr->ce_flags |= f; \
 	}
 
-#define BEANSPEAK_INIT(name) \
-	if (beanspeak_ ##name## _init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) { \
-		return FAILURE; \
-	}
-
 #define BEANSPEAK_INIT_FUNCS(class_functions) \
 	static const zend_function_entry class_functions[] =
 
@@ -128,10 +120,10 @@ typedef enum {false = 0, true = 1} bool;
 extern zend_module_entry beanspeak_module_entry;
 #define phpext_beanspeak_ptr &beanspeak_module_entry
 
-#define PHP_BEANSPEAK_VERSION		"1.0.0"
-#define PHP_BEANSPEAK_EXTNAME		"beanspeak"
-#define PHP_BEANSPEAK_AUTHOR		"Serghei Iakovlev"
-#define PHP_BEANSPEAK_DESCRIPTION	\
+#define PHP_BEANSPEAK_VERSION "1.0.0"
+#define PHP_BEANSPEAK_EXTNAME "beanspeak"
+#define PHP_BEANSPEAK_AUTHOR "Serghei Iakovlev"
+#define PHP_BEANSPEAK_DESCRIPTION \
 	"A PHP client library for the beanstalkd queue server."
 
 #if defined(ZTS) && defined(COMPILE_DL_BEANSPEAK)

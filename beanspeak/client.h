@@ -26,7 +26,7 @@ typedef struct {
 	zend_object		zo;
 } beanspeak_client_object_t;
 
-BEANSPEAK_INIT_CLASS(Beanspeak_Client);
+int beanspeak_Beanspeak_Client_init(INIT_FUNC_ARGS);
 
 PHP_METHOD(Beanspeak_Client, __construct);
 

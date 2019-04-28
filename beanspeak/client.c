@@ -85,7 +85,7 @@ beanspeak_client_init_properties(zend_class_entry *ce_ptr)
 
 /* {{{ beanspeak_Beanspeak_Client_init
  * Create and register 'Beanspeak\Client' class. */
-BEANSPEAK_INIT_CLASS(Beanspeak_Client) {
+int beanspeak_Beanspeak_Client_init(INIT_FUNC_ARGS) {
 	BEANSPEAK_REGISTER_CLASS(Beanspeak, Client, beanspeak, client, beanspeak_client_method_entry, 0);
 
 	beanspeak_client_ce_ptr->create_object = beanspeak_client_create_object;

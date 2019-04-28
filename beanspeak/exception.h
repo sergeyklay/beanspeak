@@ -8,9 +8,9 @@
  */
 
 #ifndef PHP_BEANSPEAK_EXCEPTION_H
-# define PHP_BEANSPEAK_EXCEPTION_H 1
+#define PHP_BEANSPEAK_EXCEPTION_H 1
 
-# include "../php_beanspeak.h"
+#include "../php_beanspeak.h"
 
 typedef enum beanspeak_exception_type {
 	INVALID_ARGUMENT
@@ -22,8 +22,8 @@ extern zend_class_entry *beanspeak_invalidargumentexception_ce_ptr;
 extern zend_class_entry *exception_ce(beanspeak_exception_type_t type);
 extern zend_object *throw_exception(beanspeak_exception_type_t type, const char *fmt, ...);
 
-BEANSPEAK_INIT_CLASS(Beanspeak_ExceptionInterface);
-BEANSPEAK_INIT_CLASS(Beanspeak_InvalidArgumentException);
+int beanspeak_Beanspeak_ExceptionInterface_init(INIT_FUNC_ARGS);
+int beanspeak_Beanspeak_InvalidArgumentException_init(INIT_FUNC_ARGS);
 
 /* {{{ beanspeak_exception_method_entry */
 BEANSPEAK_INIT_FUNCS(beanspeak_exception_method_entry) {
