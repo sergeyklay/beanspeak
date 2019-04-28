@@ -90,9 +90,6 @@ typedef enum {false = 0, true = 1} bool;
 		lns## _ ##n## _ce_ptr->ce_flags |= f; \
 	}
 
-#define BEANSPEAK_INIT_FUNCS(class_functions) \
-	static const zend_function_entry class_functions[] =
-
 #define BEANSPEAK_INIT_THIS() \
 	zval this_zv; \
 	zval *this_ptr = getThis(); \

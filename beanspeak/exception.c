@@ -48,9 +48,9 @@ throw_exception(beanspeak_exception_type_t type, const char *fmt, ...)
 	return exception;
 }
 
-/* {{{ beanspeak_Beanspeak_ExceptionInterface_init
+/* {{{ beanspeak_init_exception_iface
  * Create and register 'Beanspeak\Exception\ExceptionInterface' interface. */
-int beanspeak_Beanspeak_ExceptionInterface_init(INIT_FUNC_ARGS) {
+int beanspeak_init_exception_iface(INIT_FUNC_ARGS) {
 	BEANSPEAK_REGISTER_CLASS(Beanspeak\\Exception, ExceptionInterface, beanspeak,
 		exceptioninterface, beanspeak_exception_method_entry, ZEND_ACC_INTERFACE);
 
@@ -60,9 +60,9 @@ int beanspeak_Beanspeak_ExceptionInterface_init(INIT_FUNC_ARGS) {
 }
 /* }}} */
 
-/* {{{ beanspeak_Beanspeak_InvalidArgumentException_init
+/* {{{ beanspeak_init_args_e
  * Create and register 'Beanspeak\Exception\InvalidArgumentException' class. */
-int beanspeak_Beanspeak_InvalidArgumentException_init(INIT_FUNC_ARGS) {
+int beanspeak_init_invalid_args_e(INIT_FUNC_ARGS) {
 	BEANSPEAK_REGISTER_CLASS_EX(Beanspeak\\Exception, InvalidArgumentException, beanspeak, invalidargumentexception,
 		spl_ce_InvalidArgumentException, beanspeak_exception_method_entry, 0);
 
