@@ -131,7 +131,8 @@ extern zend_module_entry beanspeak_module_entry;
 #define PHP_BEANSPEAK_VERSION		"1.0.0"
 #define PHP_BEANSPEAK_EXTNAME		"beanspeak"
 #define PHP_BEANSPEAK_AUTHOR		"Serghei Iakovlev"
-#define PHP_BEANSPEAK_DESCRIPTION	"A PHP client library for the beanstalkd queue server."
+#define PHP_BEANSPEAK_DESCRIPTION	\
+	"A PHP client library for the beanstalkd queue server."
 
 #if defined(ZTS) && defined(COMPILE_DL_BEANSPEAK)
 ZEND_TSRMLS_CACHE_EXTERN()

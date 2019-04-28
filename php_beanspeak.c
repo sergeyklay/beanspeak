@@ -3,8 +3,8 @@
  *
  * (c) Serghei Iakovlev <sadhooklay@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -96,16 +96,16 @@ static const zend_function_entry beanspeak_functions[] = {
  */
 zend_module_entry beanspeak_module_entry = {
 	STANDARD_MODULE_HEADER,
-	PHP_BEANSPEAK_EXTNAME,			/* Extension name */
-	beanspeak_functions,			/* zend_function_entry */
-	PHP_MINIT(beanspeak) ,			/* PHP_MINIT - Module initialization */
-	PHP_MSHUTDOWN(beanspeak),		/* PHP_MSHUTDOWN - Module shutdown */
-	PHP_RINIT(beanspeak),			/* PHP_RINIT - Request initialization */
-	NULL,							/* PHP_RSHUTDOWN - Request shutdown */
-	PHP_MINFO(beanspeak),			/* PHP_MINFO - Module info */
-	PHP_BEANSPEAK_VERSION,			/* Version */
-	NO_MODULE_GLOBALS,				/* Globals, and the latter is a pointer directly to the globals */
-	NULL,							/* This function is called by Zend after request shutdown. It is rarely used */
+	PHP_BEANSPEAK_EXTNAME,
+	beanspeak_functions,
+	PHP_MINIT(beanspeak),
+	PHP_MSHUTDOWN(beanspeak),
+	PHP_RINIT(beanspeak),
+	NULL,
+	PHP_MINFO(beanspeak),
+	PHP_BEANSPEAK_VERSION,
+	NO_MODULE_GLOBALS,
+	NULL,
 	STANDARD_MODULE_PROPERTIES_EX
 };
 /* }}} */
@@ -116,3 +116,12 @@ ZEND_TSRMLS_CACHE_DEFINE()
 #endif
 ZEND_GET_MODULE(beanspeak)
 #endif
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw=4 ts=4 fdm=marker
+ * vim<600: noet sw=4 ts=4
+ */
