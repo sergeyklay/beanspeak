@@ -3,8 +3,8 @@
  *
  * (c) Serghei Iakovlev <sadhooklay@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 #ifndef PHP_BEANSPEAK_EXCEPTION_H
@@ -32,3 +32,12 @@ BEANSPEAK_INIT_FUNCS(beanspeak_exception_method_entry) {
 /* }}} */
 
 #endif /* PHP_BEANSPEAK_EXCEPTION_H */
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw=4 ts=4 fdm=marker
+ * vim<600: noet sw=4 ts=4
+ */

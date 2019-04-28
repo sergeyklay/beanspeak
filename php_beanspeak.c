@@ -19,15 +19,13 @@
 #include "beanspeak/client.h"
 #include "beanspeak/exception.h"
 
-/* {{{ INI_ENTRIES
- */
+/* {{{ INI_ENTRIES */
 PHP_INI_BEGIN()
 
 PHP_INI_END()
 /* }}} */
 
-/* {{{ PHP_RINIT_FUNCTION
- */
+/* {{{ PHP_RINIT_FUNCTION */
 PHP_RINIT_FUNCTION(beanspeak)
 {
 #if defined(ZTS) && defined(COMPILE_DL_BEANSPEAK)
@@ -38,8 +36,7 @@ PHP_RINIT_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ PHP_MINIT_FUNCTION
- */
+/* {{{ PHP_MINIT_FUNCTION */
 static PHP_MINIT_FUNCTION(beanspeak)
 {
 	REGISTER_INI_ENTRIES();
@@ -52,8 +49,7 @@ static PHP_MINIT_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ PHP_MSHUTDOWN_FUNCTION
- */
+/* {{{ PHP_MSHUTDOWN_FUNCTION */
 static PHP_MSHUTDOWN_FUNCTION(beanspeak)
 {
 	UNREGISTER_INI_ENTRIES();
@@ -62,8 +58,7 @@ static PHP_MSHUTDOWN_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ PHP_MINFO_FUNCTION
- */
+/* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION(beanspeak)
 {
 	php_info_print_box_start(0);
@@ -81,19 +76,16 @@ PHP_MINFO_FUNCTION(beanspeak)
 }
 /* }}} */
 
-/* {{{ arginfo
- */
+/* {{{ arginfo */
 /* }}} */
 
-/* {{{ beanspeak_functions[]
- */
+/* {{{ beanspeak_functions[] */
 static const zend_function_entry beanspeak_functions[] = {
 	PHP_FE_END
 };
 /* }}} */
 
-/* {{{ beanspeak_module_entry
- */
+/* {{{ beanspeak_module_entry */
 zend_module_entry beanspeak_module_entry = {
 	STANDARD_MODULE_HEADER,
 	PHP_BEANSPEAK_EXTNAME,

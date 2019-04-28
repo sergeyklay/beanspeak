@@ -3,8 +3,8 @@
  *
  * (c) Serghei Iakovlev <sadhooklay@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -210,3 +210,12 @@ PHP_METHOD(Beanspeak_Client, __construct) {
 	}
 }
 /* }}} */
+
+ /*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw=4 ts=4 fdm=marker
+ * vim<600: noet sw=4 ts=4
+ */
