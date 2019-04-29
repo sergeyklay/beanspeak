@@ -101,19 +101,6 @@ typedef enum {false = 0, true = 1} bool;
 		this_ptr = &this_zv; \
 	}
 
-#define BEANSPEAK_PROPERTY_HANDLER_PROLOG \
-	zval tmp_member; \
-	if (Z_TYPE_P(member) != IS_STRING) { \
-		ZVAL_STR(&tmp_member, zval_get_string_func(member)); \
-		member = &tmp_member; \
-		cache_slot = NULL; \
-	}
-
-#define BEANSPEAK_PROPERTY_HANDLER_EPILOG \
-	if (member == &tmp_member) { \
-		zval_ptr_dtor_str(&tmp_member); \
-	}
-
 extern zend_module_entry beanspeak_module_entry;
 #define phpext_beanspeak_ptr &beanspeak_module_entry
 
