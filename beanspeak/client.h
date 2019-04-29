@@ -16,14 +16,28 @@ BEANSPEAK_API extern zend_class_entry *beanspeak_client_ce_ptr;
 extern zend_object_handlers beanspeak_client_handlers;
 
 typedef struct {
-	zval			socket;			/* current socket connection */
-	zend_string*	host;			/* the beanstalkd server hostname or IP address to connect to */
-	uint16_t		port;			/* the port of the server to connect to */
-	uint32_t		timeout;		/* timeout in seconds when establishing the connection */
-	bool			persistent;		/* whether to make the connection persistent or not */
-	zend_string*	usedTube;		/* current used tube */
-	zval			watchedTubes;	/* current watched tubes */
-	zend_object		zo;
+	/* current socket connection */
+	zval  socket;
+
+	/* the beanstalkd server hostname or IP address to connect to */
+	zend_string *host;
+
+	/* the port of the server to connect to */
+	uint16_t port;
+
+	/* timeout in seconds when establishing the connection */
+	uint32_t timeout;
+
+	/* whether to make the connection persistent or not */
+	bool persistent;
+
+	/* current used tube */
+	zend_string *usedTube;
+
+	/* current watched tubes */
+	zval watchedTubes;
+
+	zend_object	zo;
 } beanspeak_client_object_t;
 
 int beanspeak_init_client(INIT_FUNC_ARGS);
