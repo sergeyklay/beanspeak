@@ -25,11 +25,9 @@ extern zend_object *throw_exception(beanspeak_exception_type_t type, const char 
 int beanspeak_init_exception_iface(INIT_FUNC_ARGS);
 int beanspeak_init_invalid_args_e(INIT_FUNC_ARGS);
 
-/* {{{ beanspeak_exception_me */
 static const zend_function_entry beanspeak_exception_me[] = {
 	PHP_FE_END
 };
-/* }}} */
 
 #endif /* PHP_BEANSPEAK_EXCEPTION_H */
 

@@ -48,9 +48,9 @@ throw_exception(beanspeak_exception_type_t type, const char *fmt, ...)
 	return exception;
 }
 
-/* {{{ beanspeak_init_exception_iface
- * Create and register 'Beanspeak\Exception\ExceptionInterface' interface. */
-int beanspeak_init_exception_iface(INIT_FUNC_ARGS) {
+int
+beanspeak_init_exception_iface(INIT_FUNC_ARGS)
+{
 	zend_class_entry ce;
 
 	memset(&ce, 0, sizeof(zend_class_entry));
@@ -74,11 +74,10 @@ int beanspeak_init_exception_iface(INIT_FUNC_ARGS) {
 
 	return SUCCESS;
 }
-/* }}} */
 
-/* {{{ beanspeak_init_args_e
- * Create and register 'Beanspeak\Exception\InvalidArgumentException' class. */
-int beanspeak_init_invalid_args_e(INIT_FUNC_ARGS) {
+int
+beanspeak_init_invalid_args_e(INIT_FUNC_ARGS)
+{
 	zend_class_entry ce;
 
 	if (!spl_ce_InvalidArgumentException) {
@@ -117,7 +116,6 @@ int beanspeak_init_invalid_args_e(INIT_FUNC_ARGS) {
 
 	return SUCCESS;
 }
-/* }}} */
 
 /*
  * Local variables:

@@ -22,15 +22,12 @@
 zend_object_handlers beanspeak_client_handlers;
 zend_class_entry *beanspeak_client_ce_ptr;
 
-/* {{{ beanspeak_client_create_object */
 static zend_always_inline beanspeak_client_object_t*
 beanspeak_client_fetch_object(zend_object* obj)
 {
 	return (beanspeak_client_object_t*)((char*)(obj) - XtOffsetOf(beanspeak_client_object_t, zo));
 }
-/* }}} */
 
-/* {{{ beanspeak_client_create_object */
 static zend_object*
 beanspeak_client_create_object(zend_class_entry* ce_ptr)
 {
@@ -45,9 +42,7 @@ beanspeak_client_create_object(zend_class_entry* ce_ptr)
 
 	return &intern->zo;
 }
-/* }}} */
 
-/* {{{ beanspeak_client_create_object */
 static void
 beanspeak_client_object_free(zend_object *object)
 {
@@ -66,10 +61,7 @@ beanspeak_client_object_free(zend_object *object)
 
 	zend_object_std_dtor(&obj->zo);
 }
-/* }}} */
 
-/* {{{ beanspeak_client_init_properties
- * Declare 'Beanspeak\Client' class properties. */
 static void
 beanspeak_client_init_properties(zend_class_entry *ce_ptr)
 {
@@ -81,11 +73,10 @@ beanspeak_client_init_properties(zend_class_entry *ce_ptr)
 	zend_declare_property_string(ce_ptr, ZEND_STRL("usedTube"), "default", ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(ce_ptr, ZEND_STRL("watchedTubes"), ZEND_ACC_PROTECTED TSRMLS_CC);
 }
-/* }}} */
 
-/* {{{ beanspeak_init_client
- * Create and register 'Beanspeak\Client' class. */
-int beanspeak_init_client(INIT_FUNC_ARGS) {
+int
+beanspeak_init_client(INIT_FUNC_ARGS)
+{
 	zend_class_entry ce;
 
 	memset(&ce, 0, sizeof(zend_class_entry));
@@ -115,9 +106,7 @@ int beanspeak_init_client(INIT_FUNC_ARGS) {
 
 	return SUCCESS;
 }
-/* }}} */
 
-/* {{{ beanspeak_client_instance */
 static int
 beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t dsn_len)
 {
@@ -141,6 +130,7 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 	/* Check protocol.
 	 * Right now only 'tcp' is allowed:
 	 *   tcp://10.0.0.8:11300
+     *
 	 * todo: add support of unix sockets
 	 */
 	if (uri->scheme) {
@@ -202,7 +192,6 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 
 	return SUCCESS;
 }
-/* }}} */
 
 /* {{{ proto public Beanspeak\Client::__construct([string $dsn = NULL]) */
 PHP_METHOD(Beanspeak_Client, __construct) {
