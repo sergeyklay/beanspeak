@@ -94,10 +94,8 @@ beanspeak_init_client(INIT_FUNC_ARGS)
 	memcpy(&beanspeak_client_handlers, zend_get_std_object_handlers(),
 		   sizeof(beanspeak_client_handlers));
 
-	/* offset of real object header (usually zero) */
 	beanspeak_client_handlers.offset = (int) XtOffsetOf(beanspeak_client_object_t, zo);
 
-	/* general object functions */
 	beanspeak_client_handlers.free_obj  = beanspeak_client_object_free;
 	beanspeak_client_handlers.dtor_obj  = zend_objects_destroy_object;
 	beanspeak_client_handlers.clone_obj = NULL; /* has no clone implementation */

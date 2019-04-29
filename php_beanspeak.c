@@ -74,14 +74,18 @@ PHP_MINFO_FUNCTION(beanspeak)
 	DISPLAY_INI_ENTRIES();
 }
 
-static const zend_function_entry beanspeak_functions[] = {
-	PHP_FE_END
+static const zend_module_dep beanspeak_deps[] = {
+	ZEND_MOD_REQUIRED("spl")
+	ZEND_MOD_REQUIRED("standard")
+	ZEND_MOD_END
 };
 
 zend_module_entry beanspeak_module_entry = {
-	STANDARD_MODULE_HEADER,
+	STANDARD_MODULE_HEADER_EX,
+	NULL,
+	beanspeak_deps,
 	PHP_BEANSPEAK_EXTNAME,
-	beanspeak_functions,
+	NULL,
 	PHP_MINIT(beanspeak),
 	PHP_MSHUTDOWN(beanspeak),
 	PHP_RINIT(beanspeak),

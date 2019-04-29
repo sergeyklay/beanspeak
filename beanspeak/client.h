@@ -37,6 +37,7 @@ typedef struct {
 	/* current watched tubes */
 	zval watchedTubes;
 
+	/* real object header */
 	zend_object	zo;
 } beanspeak_client_object_t;
 
