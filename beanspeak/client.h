@@ -17,7 +17,7 @@ extern zend_object_handlers beanspeak_client_handlers;
 
 typedef struct {
 	/* current socket connection */
-	zval  socket;
+	zval socket;
 
 	/* the beanstalkd server hostname or IP address to connect to */
 	zend_string *host;
@@ -44,6 +44,7 @@ typedef struct {
 int beanspeak_init_client(INIT_FUNC_ARGS);
 
 PHP_METHOD(Beanspeak_Client, __construct);
+PHP_METHOD(Beanspeak_Client, disconnect);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_beanspeak_client_construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO(0, dsn, IS_STRING, 1)
@@ -52,6 +53,7 @@ ZEND_END_ARG_INFO()
 static const zend_function_entry beanspeak_client_me[] = {
 	PHP_ME(Beanspeak_Client, __construct, arginfo_beanspeak_client_construct,
 		   ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME(Beanspeak_Client, disconnect, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 

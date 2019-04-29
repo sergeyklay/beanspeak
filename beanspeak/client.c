@@ -12,6 +12,7 @@
 #endif
 
 #include <php.h>
+#include <php_streams.h>
 #include <Zend/zend_operators.h>
 #include <ext/standard/url.h>
 
@@ -145,7 +146,7 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 						sizeof("tcp")) != 0) {
 			throw_exception(
 				INVALID_ARGUMENT,
-				"Invalid DSN scheme. Supported schemes are either 'tcp' or 'unix' (disabled), got '%s'.",
+				"Invalid DSN scheme. Supported schemes are either 'tcp' or 'unix', got '%s'.",
 				BEANSPEAK_URI_STR_VAL(uri->scheme));
 
 			php_url_free(uri);
@@ -203,6 +204,40 @@ PHP_METHOD(Beanspeak_Client, __construct) {
 		/* the dsn string was provided. initialize connection options */
 		beanspeak_client_initialize(this_ptr, dsn_str, dsn_len);
 	}
+}
+/* }}} */
+
+/* {{{ proto public bool Beanspeak\Client::disconnect() */
+PHP_METHOD(Beanspeak_Client, disconnect) {
+	beanspeak_client_object_t* object;
+	php_stream *stream;
+
+	BEANSPEAK_INIT_THIS();
+	if (Z_ISUNDEF_P(this_ptr)) {
+		object_init_ex(this_ptr, beanspeak_client_ce_ptr);
+	}
+
+	object = (beanspeak_client_object_t *)Z_OBJ_P(this_ptr);
+
+	if (Z_TYPE_P(&object->socket) != IS_RESOURCE) {
+		RETURN_FALSE;
+	}
+
+	php_stream_from_zval_no_verify(stream, &object->socket);
+	if (!stream) {
+		RETURN_FALSE;
+	}
+
+	if ((stream->flags & PHP_STREAM_FLAG_NO_FCLOSE) == 0) {
+		php_stream_free(
+			stream,
+			PHP_STREAM_FREE_KEEP_RSRC |
+			(stream->is_persistent
+			 ? PHP_STREAM_FREE_CLOSE_PERSISTENT
+			 : PHP_STREAM_FREE_CLOSE));
+	}
+
+	RETURN_TRUE;
 }
 /* }}} */
 
