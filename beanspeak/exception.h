@@ -17,7 +17,7 @@ typedef enum beanspeak_exception_type {
 } beanspeak_exception_type_t;
 
 extern zend_class_entry *beanspeak_exception_iface_ce_ptr;
-extern zend_class_entry *beanspeak_invalidargumentexception_ce_ptr;
+extern zend_class_entry *beanspeak_invalid_args_ce_ptr;
 
 extern zend_class_entry *exception_ce(beanspeak_exception_type_t type);
 extern zend_object *throw_exception(beanspeak_exception_type_t type, const char *fmt, ...);

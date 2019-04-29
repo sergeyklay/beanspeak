@@ -19,7 +19,7 @@
 #include "exception.h"
 
 zend_class_entry *beanspeak_exception_iface_ce_ptr;
-zend_class_entry *beanspeak_invalidargumentexception_ce_ptr;
+zend_class_entry *beanspeak_invalid_args_ce_ptr;
 
 zend_class_entry*
 exception_ce(beanspeak_exception_type_t type)
@@ -27,7 +27,7 @@ exception_ce(beanspeak_exception_type_t type)
 	switch (type) {
 		default:
 		case INVALID_ARGUMENT:
-			return beanspeak_invalidargumentexception_ce_ptr;
+			return beanspeak_invalid_args_ce_ptr;
 	}
 }
 
@@ -79,11 +79,41 @@ int beanspeak_init_exception_iface(INIT_FUNC_ARGS) {
 /* {{{ beanspeak_init_args_e
  * Create and register 'Beanspeak\Exception\InvalidArgumentException' class. */
 int beanspeak_init_invalid_args_e(INIT_FUNC_ARGS) {
-	BEANSPEAK_REGISTER_CLASS_EX(Beanspeak\\Exception, InvalidArgumentException, beanspeak, invalidargumentexception,
-		spl_ce_InvalidArgumentException, beanspeak_exception_me, 0);
+	zend_class_entry ce;
 
-	zend_class_implements(beanspeak_invalidargumentexception_ce_ptr, 1,
-						  beanspeak_exception_iface_ce_ptr);
+	if (!spl_ce_InvalidArgumentException) {
+		zend_error(
+			E_ERROR,
+			"Can't register class %s with null parent.",
+			"Beanspeak\\Exception\\InvalidArgumentException"
+		);
+		return FAILURE;
+	}
+
+	memset(&ce, 0, sizeof(zend_class_entry));
+	INIT_NS_CLASS_ENTRY(ce, "Beanspeak\\Exception", "InvalidArgumentException",
+						beanspeak_exception_me);
+
+	beanspeak_invalid_args_ce_ptr = zend_register_internal_class_ex(
+		&ce,
+		spl_ce_InvalidArgumentException);
+
+	if (UNEXPECTED(!beanspeak_invalid_args_ce_ptr)) {
+		zend_error(
+			E_ERROR,
+			"Class to extend %s was not found when registering %s.",
+			ZSTR_VAL(spl_ce_InvalidArgumentException->name),
+			"Beanspeak\\Exception\\InvalidArgumentException"
+		);
+		return FAILURE;
+	}
+
+	beanspeak_invalid_args_ce_ptr->ce_flags |= 0;
+
+	zend_class_implements(
+		beanspeak_invalid_args_ce_ptr,
+		1,
+		beanspeak_exception_iface_ce_ptr);
 
 	return SUCCESS;
 }

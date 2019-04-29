@@ -36,8 +36,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_beanspeak_client_construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
 /* }}} */
 
-/* {{{ beanspeak_client_method_entry */
-static const zend_function_entry beanspeak_client_method_entry[] = {
+/* {{{ beanspeak_client_me */
+static const zend_function_entry beanspeak_client_me[] = {
 	PHP_ME(Beanspeak_Client, __construct, arginfo_beanspeak_client_construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_FE_END
 };

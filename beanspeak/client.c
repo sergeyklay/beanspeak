@@ -86,11 +86,22 @@ beanspeak_client_init_properties(zend_class_entry *ce_ptr)
 /* {{{ beanspeak_init_client
  * Create and register 'Beanspeak\Client' class. */
 int beanspeak_init_client(INIT_FUNC_ARGS) {
-	BEANSPEAK_REGISTER_CLASS(Beanspeak, Client, beanspeak, client, beanspeak_client_method_entry, 0);
+	zend_class_entry ce;
 
+	memset(&ce, 0, sizeof(zend_class_entry));
+	INIT_NS_CLASS_ENTRY(ce, "Beanspeak", "Client", beanspeak_client_me);
+	beanspeak_client_ce_ptr = zend_register_internal_class(&ce);
+
+	if (UNEXPECTED(!beanspeak_client_ce_ptr)) {
+		zend_error(E_ERROR, "Beanspeak\\Client registration has failed.");
+		return FAILURE;
+	}
+
+	beanspeak_client_ce_ptr->ce_flags |= 0;
 	beanspeak_client_ce_ptr->create_object = beanspeak_client_create_object;
 
-	memcpy(&beanspeak_client_handlers, zend_get_std_object_handlers(), sizeof(beanspeak_client_handlers));
+	memcpy(&beanspeak_client_handlers, zend_get_std_object_handlers(),
+		   sizeof(beanspeak_client_handlers));
 
 	/* offset of real object header (usually zero) */
 	beanspeak_client_handlers.offset = (int) XtOffsetOf(beanspeak_client_object_t, zo);

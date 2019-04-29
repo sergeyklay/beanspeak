@@ -55,41 +55,6 @@ typedef enum {false = 0, true = 1} bool;
 #define BEANSPEAK_API
 #endif
 
-/* class/interface registering */
-#define BEANSPEAK_REGISTER_CLASS(ns, cl, lns, n, m, f) \
-	{ \
-		zend_class_entry ce; \
-		memset(&ce, 0, sizeof(zend_class_entry)); \
-		INIT_NS_CLASS_ENTRY(ce, #ns, #cl, m); \
-		lns## _ ##n## _ce_ptr = zend_register_internal_class(&ce); \
-		if (UNEXPECTED(!lns## _ ##n## _ce_ptr)) { \
-			zend_error(E_ERROR, "Class '%s' registration has failed.", \
-				ZEND_NS_NAME(#ns, #cl)); \
-			return FAILURE; \
-		} \
-		lns## _ ##n## _ce_ptr->ce_flags |= f; \
-	}
-
-/* class/interface registering with parents */
-#define BEANSPEAK_REGISTER_CLASS_EX(ns, cl, lns, n, pce, m, f) \
-	{ \
-	zend_class_entry ce; \
-		if (!pce) { \
-			zend_error(E_ERROR, "Can't register class '%s' with null parent.", \
-					   ZEND_NS_NAME(#ns, #cl)); \
-			return FAILURE; \
-		} \
-		memset(&ce, 0, sizeof(zend_class_entry)); \
-		INIT_NS_CLASS_ENTRY(ce, #ns, #cl, m); \
-		lns## _ ##n## _ce_ptr = zend_register_internal_class_ex(&ce, pce); \
-		if (UNEXPECTED(!lns## _ ##n## _ce_ptr)) { \
-			zend_error(E_ERROR, "Class to extend '%s' was not found when registering class '%s'.", \
-					   (pce ? ZSTR_VAL(pce->name) : "NULL"), ZEND_NS_NAME(#ns, #cl)); \
-			return FAILURE; \
-		} \
-		lns## _ ##n## _ce_ptr->ce_flags |= f; \
-	}
-
 #define BEANSPEAK_INIT_THIS() \
 	zval this_zv; \
 	zval *this_ptr = getThis(); \
