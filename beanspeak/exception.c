@@ -18,7 +18,7 @@
 #include "../php_beanspeak.h"
 #include "exception.h"
 
-zend_class_entry *beanspeak_exceptioninterface_ce_ptr;
+zend_class_entry *beanspeak_exception_iface_ce_ptr;
 zend_class_entry *beanspeak_invalidargumentexception_ce_ptr;
 
 zend_class_entry*
@@ -51,10 +51,26 @@ throw_exception(beanspeak_exception_type_t type, const char *fmt, ...)
 /* {{{ beanspeak_init_exception_iface
  * Create and register 'Beanspeak\Exception\ExceptionInterface' interface. */
 int beanspeak_init_exception_iface(INIT_FUNC_ARGS) {
-	BEANSPEAK_REGISTER_CLASS(Beanspeak\\Exception, ExceptionInterface, beanspeak,
-		exceptioninterface, beanspeak_exception_method_entry, ZEND_ACC_INTERFACE);
+	zend_class_entry ce;
 
-	zend_class_implements(beanspeak_exceptioninterface_ce_ptr, 1, zend_ce_throwable);
+	memset(&ce, 0, sizeof(zend_class_entry));
+	INIT_NS_CLASS_ENTRY(ce, "Beanspeak\\Exception", "ExceptionInterface",
+						beanspeak_exception_me);
+
+	beanspeak_exception_iface_ce_ptr = zend_register_internal_class(&ce);
+
+	if (UNEXPECTED(!beanspeak_exception_iface_ce_ptr)) {
+		zend_error(
+			E_ERROR,
+			"Beanspeak\\Exception\\ExceptionInterface registration has failed."
+		);
+		return FAILURE;
+	}
+
+	beanspeak_exception_iface_ce_ptr->ce_flags |= ZEND_ACC_INTERFACE;
+
+	zend_class_implements(beanspeak_exception_iface_ce_ptr, 1,
+						  zend_ce_throwable);
 
 	return SUCCESS;
 }
@@ -64,9 +80,10 @@ int beanspeak_init_exception_iface(INIT_FUNC_ARGS) {
  * Create and register 'Beanspeak\Exception\InvalidArgumentException' class. */
 int beanspeak_init_invalid_args_e(INIT_FUNC_ARGS) {
 	BEANSPEAK_REGISTER_CLASS_EX(Beanspeak\\Exception, InvalidArgumentException, beanspeak, invalidargumentexception,
-		spl_ce_InvalidArgumentException, beanspeak_exception_method_entry, 0);
+		spl_ce_InvalidArgumentException, beanspeak_exception_me, 0);
 
-	zend_class_implements(beanspeak_invalidargumentexception_ce_ptr, 1, beanspeak_exceptioninterface_ce_ptr);
+	zend_class_implements(beanspeak_invalidargumentexception_ce_ptr, 1,
+						  beanspeak_exception_iface_ce_ptr);
 
 	return SUCCESS;
 }
