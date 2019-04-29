@@ -132,56 +132,53 @@ beanspeak_client_initialize(zval *this_ptr, const char *dsn_str, const size_t ds
 	 * todo: add support of unix sockets
 	 */
 	if (uri->scheme) {
-#if PHP_VERSION_ID >= 70300
-		if (strncasecmp("unix", ZSTR_VAL(uri->scheme), sizeof("unix")) == 0) {
-#else
-		if (strncasecmp("unix", uri->scheme, sizeof("unix")) == 0) {
-#endif
-			throw_exception(INVALID_ARGUMENT, "Protocol 'unix' currently disabled in Beanspeak Client.");
+		if (strncasecmp("unix", BEANSPEAK_URI_STR_VAL(uri->scheme),
+						sizeof("unix")) == 0) {
+			throw_exception(
+				INVALID_ARGUMENT,
+				"Protocol 'unix' currently disabled in Beanspeak Client.");
 			php_url_free(uri);
 			return FAILURE;
 		}
 
-#if PHP_VERSION_ID >= 70300
-		if (strncasecmp("tcp", ZSTR_VAL(uri->scheme), sizeof("tcp")) != 0) {
-			throw_exception(INVALID_ARGUMENT,
+		if (strncasecmp("tcp", BEANSPEAK_URI_STR_VAL(uri->scheme),
+						sizeof("tcp")) != 0) {
+			throw_exception(
+				INVALID_ARGUMENT,
 				"Invalid DSN scheme. Supported schemes are either 'tcp' or 'unix' (disabled), got '%s'.",
-				ZSTR_VAL(uri->scheme)
-			);
-#else
-		if (strncasecmp("tcp", uri->scheme, sizeof("tcp")) != 0) {
-			throw_exception(INVALID_ARGUMENT,
-				 "Invalid DSN scheme. Supported schemes are either 'tcp' or 'unix' (disabled), got '%s'.",
-				 uri->scheme
-			);
-#endif
+				BEANSPEAK_URI_STR_VAL(uri->scheme));
+
 			php_url_free(uri);
 			return FAILURE;
 		}
 	}
 
 	if (uri->host) {
-#if PHP_VERSION_ID >= 70300
-		zend_update_property_string(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("host"), ZSTR_VAL(uri->host));
-#else
-		zend_update_property_string(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("host"), uri->host);
-#endif
+		zend_update_property_string(
+			beanspeak_client_ce_ptr, this_ptr,
+			ZEND_STRL("host"),
+			BEANSPEAK_URI_STR_VAL(uri->host));
 	} else if (uri->path && !uri->host) {
 		/* allow simple 'hostname' format, which php_url_parse_ex() treats as a path, not host */
-#if PHP_VERSION_ID >= 70300
-		zend_update_property_string(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("host"), ZSTR_VAL(uri->path));
-#else
-		zend_update_property_string(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("host"), uri->path);
-#endif
+		zend_update_property_string(
+			beanspeak_client_ce_ptr,
+			this_ptr,
+			ZEND_STRL("host"),
+			BEANSPEAK_URI_STR_VAL(uri->path));
 	} else {
-		throw_exception(INVALID_ARGUMENT, "Invalid Client DSN scheme: missed host part.");
+		throw_exception(
+			INVALID_ARGUMENT,
+			"Invalid Client DSN scheme: missed host part.");
 		php_url_free(uri);
 		return FAILURE;
 	}
 
 	/* extract the port number as a long */
 	if (uri->port) {
-		zend_update_property_long(beanspeak_client_ce_ptr, this_ptr, ZEND_STRL("port"), (uint16_t)uri->port);
+		zend_update_property_long(
+			beanspeak_client_ce_ptr,
+			this_ptr, ZEND_STRL("port"),
+			(uint16_t)uri->port);
 	}
 
 	/* todo: get 'timeout' and 'persistent' from the uri->query as well */

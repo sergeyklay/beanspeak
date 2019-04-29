@@ -44,7 +44,7 @@ static PHP_MINIT_FUNCTION(beanspeak)
 		return FAILURE;
 	}
 
-   	if (beanspeak_init_invalid_args_e(INIT_FUNC_ARGS_PASSTHRU)== FAILURE) {
+   	if (beanspeak_init_invalid_args_e(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) {
 		return FAILURE;
 	}
 

@@ -55,6 +55,12 @@ typedef enum {false = 0, true = 1} bool;
 #define BEANSPEAK_API
 #endif
 
+#if PHP_VERSION_ID >= 70300
+#define BEANSPEAK_URI_STR_VAL(member) ZSTR_VAL(member)
+#else
+#define BEANSPEAK_URI_STR_VAL(member) member
+#endif
+
 #define BEANSPEAK_INIT_THIS() \
 	zval this_zv; \
 	zval *this_ptr = getThis(); \
