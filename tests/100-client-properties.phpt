@@ -10,7 +10,7 @@ foreach ($reflect->getProperties() as $prop) {
 }
 ?>
 --EXPECT--
-private $socket;
+private $connection;
 private $host;
 private $port;
 private $timeout;

@@ -16,8 +16,8 @@ BEANSPEAK_API extern zend_class_entry *beanspeak_client_ce_ptr;
 extern zend_object_handlers beanspeak_client_handlers;
 
 typedef struct {
-	/* current socket connection */
-	zval socket;
+	/* current beanstalkd connection */
+	zval connection;
 
 	/* the beanstalkd server hostname or IP address to connect to */
 	zend_string *host;

@@ -49,7 +49,7 @@ beanspeak_client_object_free(zend_object *object)
 {
 	beanspeak_client_object_t* obj = beanspeak_client_fetch_object(object);
 
-	zval_dtor(&obj->socket);
+	zval_dtor(&obj->connection);
 	zval_dtor(&obj->watchedTubes);
 
 	if (obj->host) {
@@ -66,7 +66,7 @@ beanspeak_client_object_free(zend_object *object)
 static void
 beanspeak_client_init_properties(zend_class_entry *ce_ptr)
 {
-	zend_declare_property_null(ce_ptr, ZEND_STRL("socket"), ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_null(ce_ptr, ZEND_STRL("connection"), ZEND_ACC_PRIVATE TSRMLS_CC);
 	zend_declare_property_string(ce_ptr, ZEND_STRL("host"), "127.0.0.1", ZEND_ACC_PRIVATE TSRMLS_CC);
 	zend_declare_property_long(ce_ptr, ZEND_STRL("port"), 11300, ZEND_ACC_PRIVATE TSRMLS_CC);
 	zend_declare_property_long(ce_ptr, ZEND_STRL("timeout"), 60, ZEND_ACC_PRIVATE TSRMLS_CC);
@@ -219,11 +219,11 @@ PHP_METHOD(Beanspeak_Client, disconnect) {
 
 	object = (beanspeak_client_object_t *)Z_OBJ_P(this_ptr);
 
-	if (Z_TYPE_P(&object->socket) != IS_RESOURCE) {
+	if (Z_TYPE_P(&object->connection) != IS_RESOURCE) {
 		RETURN_FALSE;
 	}
 
-	php_stream_from_zval_no_verify(stream, &object->socket);
+	php_stream_from_zval_no_verify(stream, &object->connection);
 	if (!stream) {
 		RETURN_FALSE;
 	}

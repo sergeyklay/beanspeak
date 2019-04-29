@@ -14,7 +14,7 @@ foreach ($reflect->getProperties() as $prop) {
 }
 ?>
 --EXPECT--
-private $socket = NULL;
+private $connection = NULL;
 private $host = 127.0.0.1;
 private $port = 11300;
 private $timeout = 60;
